@@ -1,4 +1,5 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { resendAdapter } from '@payloadcms/email-resend'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { buildConfig } from 'payload'
@@ -19,6 +20,15 @@ import { SiteSettings } from './globals/SiteSettings'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+// Without RESEND_API_KEY (local dev) Payload writes emails to the console instead of sending them.
+const email = process.env.RESEND_API_KEY
+  ? resendAdapter({
+      apiKey: process.env.RESEND_API_KEY,
+      defaultFromAddress: process.env.EMAIL_FROM_ADDRESS || 'orders@example.com',
+      defaultFromName: process.env.EMAIL_FROM_NAME || 'INVENTO',
+    })
+  : undefined
+
 export default buildConfig({
   serverURL: process.env.NEXT_PUBLIC_SITE_URL || '',
   admin: {
@@ -38,6 +48,7 @@ export default buildConfig({
     fallback: true,
   },
   editor: lexicalEditor(),
+  email,
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: { outputFile: path.resolve(dirname, 'payload-types.ts') },
   db: postgresAdapter({

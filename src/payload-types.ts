@@ -333,7 +333,7 @@ export interface Media {
   };
 }
 /**
- * Order requests from the website. Confirm each on Viber, then move the status along. / Нарачки од страницата.
+ * Order requests from the website. Confirm each on Viber, then move the status along: new → confirmed → in production → shipped → delivered (or cancelled). / Нарачки од страницата. Потврдете ја секоја на Viber.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "orders".
@@ -345,7 +345,7 @@ export interface Order {
    */
   ref?: string | null;
   /**
-   * Cancelling puts the pieces back into stock (once). / Откажувањето ги враќа парчињата на залиха.
+   * Cancelling puts the pieces back into stock (once). If you un-cancel, adjust the stock by hand. / Откажувањето ги враќа парчињата на залиха (еднаш).
    */
   status: 'new' | 'confirmed' | 'in_production' | 'shipped' | 'delivered' | 'cancelled';
   customerName: string;
@@ -379,6 +379,11 @@ export interface Order {
   privacyConsent: boolean;
   publicToken?: string | null;
   stockRestored?: boolean | null;
+  /**
+   * For deletion requests. Removes name, phone, email, address and notes. Cannot be undone. / За барања за бришење. Неповратно.
+   */
+  anonymizeNow?: boolean | null;
+  anonymizedAt?: string | null;
   /**
    * Only you see this. / Само вие го гледате ова.
    */
@@ -731,6 +736,8 @@ export interface OrdersSelect<T extends boolean = true> {
   privacyConsent?: T;
   publicToken?: T;
   stockRestored?: T;
+  anonymizeNow?: T;
+  anonymizedAt?: T;
   internalNotes?: T;
   updatedAt?: T;
   createdAt?: T;
