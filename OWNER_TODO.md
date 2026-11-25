@@ -18,6 +18,11 @@ Things only you (the owner) can do or decide. Nothing here blocks development; t
 - [ ] Try the full flow on your phone: add to cart → order form → success page → "Open Viber" / "Copy order summary".
 - [ ] Decide your routine for **cancelled orders** (cancelling puts the stock back automatically, once) and for **data deletion requests** (each order has an "Anonymise personal data" checkbox).
 
+## Motion review (Gate 2)
+
+- [ ] Watch the recordings in `docs/screenshots/m4/` (`.webm`, opens in any browser) and tell us what to change: speed, how much motion, anything that feels too much on a phone.
+- [ ] Once the site is online, try the home page on your own phone, especially opened from an Instagram link.
+
 ## Products and prices (Admin → Kits)
 
 - [ ] Decide the launch range (1–3 kits). Replace the three **sample kits** (Mini catapult, Hydraulic arm, Gear machine), or edit them into real ones and **untick "isPlaceholder"**.

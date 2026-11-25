@@ -8,7 +8,7 @@
 
 | Name | Used for | Replace with | Notes |
 |---|---|---|---|
-| `box` / `box-closed` | Logo mark, hero, empty states, sold-out block | `public/art/box.svg` (+ `box-closed.svg`) | **Most important.** Navy outside, orange inside. For the M4 lid animation the SVG needs separate groups for the lid and the base (`data-part="lid-open"`, `"lid-closed"`, `"base"`, `"inside"`). |
+| `box` / `box-closed` | Logo mark, hero, empty states, sold-out block | `public/art/box.svg` (+ `box-closed.svg`) | **Most important.** Navy outside, orange inside. The preloader and hero animate the lid on its hinge, so the replacement SVG must be **inline-able** (not an `<img>`) and keep separate groups: `data-part="lid-open"` (lid standing up, hinge at its bottom edge), `"lid-closed"` (lid on the box, hinge at its top edge), `"base"` and `"inside"`. Send the artwork and we will wire it in. |
 | `gear`, `gear-orange`, `gear-teal` | Difficulty rating, section decorations | `public/art/gear.svg` | |
 | `rocket` | Hero parts, How-it-works step 4 | `public/art/rocket.svg` | |
 | `bulb` | Hero parts, How-it-works step 3, FAQ header | `public/art/bulb.svg` | |

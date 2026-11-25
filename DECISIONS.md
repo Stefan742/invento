@@ -73,3 +73,37 @@ Short log of non-obvious choices and why. Newest at the bottom of each milestone
 - **Contact form:** emails the owner directly (`ORDER_NOTIFY_EMAIL`, else the Site settings email); nothing is stored. Same honeypot, signed token and rate limit as orders.
 - **Error text colour `#B3261E`** (5.9:1 on paper) is the one non-palette colour, used only for form error messages, so errors never look like brand accents.
 - **"New orders" count in the admin nav:** skipped (nice-to-have). The Orders list sorts newest first and filters by status.
+
+## M4: Signature motion
+
+- **Libraries (verified 2026-11-25):** GSAP 3.15.1 under its Standard "no charge" licence (free for commercial use, all plugins included since 2025; the licence only excludes tools that compete with Webflow), Lenis 1.3.28, Matter.js 0.20.0. All loaded with dynamic `import()` only where used: GSAP + ScrollTrigger on the home page, Matter.js only when the Questions section comes near, Lenis only on fine-pointer desktops. Pages other than home load no animation library.
+- **One switch per feature:** `NEXT_PUBLIC_MOTION_OFF=all` or a comma list (`smooth, header, cursor, preloader, hero, marble, reveals, showcase, hiw, gallery, physics, footer`). For QA, `?motion=off` (everything) or `?motion=off:marble,physics` (just those) in the URL.
+- **Three branches with `gsap.matchMedia()`:** desktop (fine pointer, ≥ 1024 px), touch / mobile, reduced motion (= nothing: static page, no preloader, static parts pile). Lenis, the gear cursor, section circle reveals, the pinned showcase and gallery parallax are desktop only.
+- **Content is never trapped:** every element is in the server HTML in its final position. Initial animation states are applied by JS after mount, and everything is reverted on unmount (`gsap.matchMedia().revert()`, canvas/observers/listeners removed). E2E-tested: reduced motion, `?motion=off`, no-JS, and navigating away and back without errors.
+- **Preloader:**
+  - **When it shows:** home page only, first visit per session. A tiny inline script decides before first paint (adds `html.show-preloader`), so the overlay never flashes. Without JS it never appears.
+  - **Skip:** Skip and Escape are wired by that inline script, so they work even before React loads.
+  - **Failsafes:** a CSS failsafe removes the overlay after 6 s if the motion script never runs.
+  - **Progress and timing:** fonts + window load, blended with a 1.6 s minimum, hard cap 4 s.
+  - **Reduced motion:** the preloader is skipped entirely (the brief allows a ≤ 300 ms fade; none is simpler and calmer).
+  - **Sequence deviation:** the box slams shut and hands off to the **closed** hero box. Scrolling then opens it. This keeps one story: you put the parts in, then open the box.
+- **Hero letters are split on the server** (`aria-hidden` letter spans plus a screen-reader copy of the word). GSAP SplitText's ARIA handling on a `<span>` inside an `<h1>` would have hidden the word from screen readers.
+- **ОТКРИВАЈ spotlight** is a radial gradient clipped to the text with an animated CSS variable (no duplicated text); forced-colours mode falls back to plain text.
+- **No ScrollTrigger `pin`.** Pinning toggles `position: fixed`, which the browser recorded as layout shift (CLS 0.95 mobile / 2.8 desktop in our measurements). The hero and the desktop showcase use CSS `position: sticky` inside a tall wrapper instead (`home/sticky.ts`): CLS 0.01 / 0, and no jitter with native touch scroll.
+- **Marble track on a viewport-sized `<canvas>`,** not a page-tall SVG. It redraws only the samples on screen, only when something moved, at ≤ 1.25× resolution on mobile. The marble follows the viewport (≈ 55 % down) along one Catmull-Rom path through the section anchors, with a small curl under the intro. Each section's track side alternates left/right in the gutter; side changes happen in section padding so the line never crosses text. Content sits above the track (z-index layers inside `<main>`).
+- **Track simple triggers (v1 scope):** the showcase gear spins, the Order sticker pops at "Pick your box", the intro catapult flicks. Levers / dominoes / catapult launches stay in the backlog.
+- **Section hand-off:** circle reveal from the track side on desktop, with `<main>` temporarily taking the previous section's colour so the area outside the circle matches. Mobile keeps hard edges (cheaper). Hero → intro is the hero dive itself.
+- **Physics:**
+  - **Rendering:** the existing SVG parts are moved with `transform` from Matter.js positions, not drawn on a canvas, so there is one illustration source.
+  - **Bodies and interaction:** desktop has 18 bodies and drag/flick (the wheel listener is removed so the page still scrolls); touch has 8 bodies and no dragging, so native scroll is untouched.
+  - **Efficiency:** the engine pauses off-screen and bodies sleep.
+- **Gear cursor** keeps the native cursor in text fields and inside dialogs (dialogs live in the browser's top layer above any z-index).
+- **Header** hides on scroll down and returns on scroll up or when anything in it gets keyboard focus.
+- **Kept as CSS (no JS):** orbiting info buttons bob, testimonial quotes animate in, the cart drawer slides in, the lightbox pops, the mobile menu opens like a lid. The global reduced-motion rule turns them off.
+- **Route transitions (lid wipe):** not attempted yet; M5 nice-to-have per the brief.
+- **Performance (production build, headless Chromium, mobile emulation 390 px with 4× CPU throttling + slow 4G, scripted scroll through the whole home page in 9 s):**
+  - **Mobile:** ≈ 52 fps average (48–57 across runs), LCP 1.9–2.1 s, CLS 0.01.
+  - **Desktop:** 60 fps, LCP 0.35 s, CLS 0.
+  - **Note:** headless Chromium rasterises canvas in software, so real phones should do better.
+  - **Degrades applied to reach this:** viewport-only track drawing, frame skipping, mobile canvas resolution cap, 8 physics bodies on mobile.
+  - **Follow-up (M5):** the full page `load` takes ~18 s on slow 4G; that is page weight (fonts, illustrations, sample images), not motion, and belongs to M5's image and font pass.

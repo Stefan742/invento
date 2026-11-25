@@ -75,6 +75,15 @@ All pages render on request from data in a tagged cache (`src/lib/data.ts`). Eve
 
 Pause all orders: Admin → Site settings → Orders → untick **Orders are open**.
 
+## Motion
+
+The home page "box" experience (preloader, lid-opening hero, marble track, section hand-offs, pinned showcase, fanned cards, physics, footer lid) plus site-wide smooth scroll, gear cursor and auto-hiding header. Code lives in `src/components/motion/`.
+
+- Everything is an enhancement: content is in the server HTML, and reduced motion, no JavaScript or `?motion=off` all give a complete static site.
+- Switch features off at build time with `NEXT_PUBLIC_MOTION_OFF=all` or a comma list (`smooth, header, cursor, preloader, hero, marble, reveals, showcase, hiw, gallery, physics, footer`). Try it per page view with `?motion=off:marble,physics`.
+- The preloader shows once per browser session on the home page; `?skip` skips it.
+- Review recordings: `docs/screenshots/m4/` (`pnpm build && pnpm start -p 3100`, then `E2E_BASE_URL=http://localhost:3100 MILESTONE=m4 pnpm screenshots --grep @motion`).
+
 ## Project layout
 
 ```
@@ -101,7 +110,7 @@ docs/screenshots/            review screenshots per milestone
 | M1 | CMS and data | ✅ |
 | M2 | Static site | ✅ (Gate 1 approved) |
 | M3 | Orders (cart, order route, stock, emails) | ✅ launchable |
-| M4 | Signature motion (Gate 2) | next |
+| M4 | Signature motion (Gate 2) | ✅ (Gate 2: owner review) |
 | M5 | Polish and hardening | |
 | M6 | Deploy and handover (Gate 3 before deploying) | |
 
