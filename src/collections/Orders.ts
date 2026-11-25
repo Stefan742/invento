@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { adminOnly } from '../access'
+import { anonymizeOrder, exportOrdersCsv, notifyOnCreate, restoreStockOnCancel } from '../hooks/orders'
 
 export const ORDER_STATUSES = [
   'new',
@@ -34,10 +35,18 @@ export const Orders: CollectionConfig = {
     defaultColumns: ['ref', 'status', 'customerName', 'phone', 'total', 'createdAt'],
     listSearchableFields: ['ref', 'customerName', 'phone', 'email'],
     description:
-      'Order requests from the website. Confirm each on Viber, then move the status along. / Нарачки од страницата.',
+      'Order requests from the website. Confirm each on Viber, then move the status along: new → confirmed → in production → shipped → delivered (or cancelled). / Нарачки од страницата. Потврдете ја секоја на Viber.',
+    components: {
+      beforeListTable: ['/components/admin/OrdersExportLink#OrdersExportLink'],
+    },
   },
   defaultSort: '-createdAt',
   access: adminOnly,
+  hooks: {
+    beforeChange: [anonymizeOrder, restoreStockOnCancel],
+    afterChange: [notifyOnCreate],
+  },
+  endpoints: [exportOrdersCsv],
   fields: [
     {
       type: 'row',
@@ -59,7 +68,7 @@ export const Orders: CollectionConfig = {
           admin: {
             width: '50%',
             description:
-              'Cancelling puts the pieces back into stock (once). / Откажувањето ги враќа парчињата на залиха.',
+              'Cancelling puts the pieces back into stock (once). If you un-cancel, adjust the stock by hand. / Откажувањето ги враќа парчињата на залиха (еднаш).',
           },
         },
       ],
@@ -176,6 +185,22 @@ export const Orders: CollectionConfig = {
       type: 'checkbox',
       defaultValue: false,
       admin: { hidden: true },
+    },
+    {
+      name: 'anonymizeNow',
+      type: 'checkbox',
+      defaultValue: false,
+      label: 'Anonymise personal data on save / Анонимизирај лични податоци',
+      admin: {
+        position: 'sidebar',
+        description:
+          'For deletion requests. Removes name, phone, email, address and notes. Cannot be undone. / За барања за бришење. Неповратно.',
+      },
+    },
+    {
+      name: 'anonymizedAt',
+      type: 'date',
+      admin: { position: 'sidebar', readOnly: true, condition: (data) => Boolean(data?.anonymizedAt) },
     },
     {
       name: 'internalNotes',
