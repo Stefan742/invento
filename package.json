@@ -1,0 +1,84 @@
+{
+  "name": "invento-web",
+  "version": "1.0.0",
+  "description": "INVENTO: bilingual website and order-request shop for wooden DIY engineering kits (Next.js + Payload CMS + PostgreSQL)",
+  "license": "UNLICENSED",
+  "type": "module",
+  "scripts": {
+    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+    "lint": "cross-env NODE_OPTIONS=--no-deprecation eslint .",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "test": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
+    "test:watch": "cross-env NODE_OPTIONS=--no-deprecation vitest --config ./vitest.config.mts",
+    "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
+    "screenshots": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts --project=screenshots",
+    "seed": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/index.ts",
+    "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
+    "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
+    "migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
+    "migrate:create": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:create",
+    "payload": "cross-env NODE_OPTIONS=--no-deprecation payload"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^7.0.9",
+    "@payloadcms/db-postgres": "3.94.2",
+    "@payloadcms/next": "3.94.2",
+    "@payloadcms/richtext-lexical": "3.94.2",
+    "@payloadcms/ui": "3.94.2",
+    "cross-env": "^7.0.3",
+    "dotenv": "16.4.7",
+    "graphql": "^16.8.1",
+    "libphonenumber-js": "^1.13.17",
+    "next": "16.4.6",
+    "next-intl": "^4.16.2",
+    "payload": "3.94.2",
+    "react": "19.2.9",
+    "react-dom": "19.2.9",
+    "react-hook-form": "^7.92.0",
+    "server-only": "^0.0.1",
+    "sharp": "0.35.5",
+    "zod": "^4.6.7",
+    "zustand": "^5.1.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.1",
+    "@playwright/test": "1.63.0",
+    "@tailwindcss/postcss": "^4.3.5",
+    "@testing-library/react": "16.3.0",
+    "@types/node": "22.19.9",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "4.5.2",
+    "eslint": "^9.16.0",
+    "eslint-config-next": "16.4.6",
+    "jsdom": "28.0.0",
+    "postcss": "^8.5.33",
+    "prettier": "^3.4.2",
+    "tailwindcss": "^4.3.5",
+    "tsx": "4.23.15",
+    "typescript": "5.7.3",
+    "vite-tsconfig-paths": "6.0.5",
+    "vitest": "4.0.18"
+  },
+  "engines": {
+    "node": "^22.23.5 || ^24.22.3 || >=26.13.1",
+    "pnpm": "^9 || ^10 || ^11"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp",
+      "esbuild",
+      "unrs-resolver",
+      "@parcel/watcher",
+      "@swc/core"
+    ],
+    "overrides": {
+      "happy-dom": "^21.0.4"
+    }
+  },
+  "private": true
+}
