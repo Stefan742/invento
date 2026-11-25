@@ -8,7 +8,7 @@ export default defineConfig({
   testDir: './tests/e2e',
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 1, // local dev server compiles on first hit; one retry absorbs that
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? 1 : 3, // one dev server: more parallel workers make timing-based motion checks flaky
   reporter: process.env.CI ? 'github' : 'list',
   timeout: 60_000,
   use: {

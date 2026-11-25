@@ -26,6 +26,12 @@ const PAGES = [
 ]
 const LOCALES = (process.env.SCREENSHOT_LOCALES || 'mk,en').split(',')
 
+// Full-page captures show the static layout: no preloader, no sticky scroll scenes.
+// (The motion itself is reviewed through the recordings in docs/screenshots/m4.)
+test.use({ reducedMotion: 'reduce' })
+const ORDER_PAGE = { name: 'order', path: '/order' }
+PAGES.push(ORDER_PAGE)
+
 for (const locale of LOCALES) {
   for (const p of PAGES) {
     // The full matrix for the home page; other pages in mk at all widths, en at mobile + desktop.
