@@ -5,6 +5,9 @@
 import { parsePhoneNumberFromString } from 'libphonenumber-js/min'
 import { z } from 'zod'
 
+// Pure totals live in ./totals (no Zod / phone parsing) so the cart drawer stays light.
+export { computeTotals, type PricedLine } from './totals'
+
 export const MAX_LINES = 20
 export const LIMITS = {
   name: 120,
@@ -106,20 +109,6 @@ export function mergeLines(items: { kitId: number; quantity: number }[]) {
   const map = new Map<number, number>()
   for (const i of items) map.set(i.kitId, (map.get(i.kitId) ?? 0) + i.quantity)
   return [...map.entries()].map(([kitId, quantity]) => ({ kitId, quantity })).sort((a, b) => a.kitId - b.kitId)
-}
-
-export type PricedLine = { price: number | null | undefined; quantity: number }
-
-/**
- * Totals with unknown prices (docs/06): if any line price is empty, subtotal and total are null
- * and the UI says the total is confirmed on Viber. A null shipping fee makes the total null too.
- */
-export function computeTotals(lines: PricedLine[], shippingFee: number | null | undefined) {
-  const known = lines.length > 0 && lines.every((l) => typeof l.price === 'number')
-  const subtotal = known ? lines.reduce((sum, l) => sum + (l.price as number) * l.quantity, 0) : null
-  const fee = typeof shippingFee === 'number' ? shippingFee : null
-  const total = subtotal !== null && fee !== null ? subtotal + fee : null
-  return { subtotal, shippingFee: fee, total }
 }
 
 export function formatOrderRef(n: number): string {

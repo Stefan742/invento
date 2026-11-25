@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { useEffect, useRef } from 'react'
 
 import { Link } from '@/i18n/navigation'
-import { computeTotals } from '@/lib/order'
+import { computeTotals } from '@/lib/totals'
 
 import { Stepper, useResolvedLines } from './CartUI'
 import { useCartContext } from './CartProvider'
