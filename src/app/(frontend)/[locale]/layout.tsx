@@ -1,7 +1,9 @@
 import '@/styles/globals.css'
 
 import type { Metadata, Viewport } from 'next'
+import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
+import Script from 'next/script'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import type { ReactNode } from 'react'
@@ -12,10 +14,12 @@ import { AnnouncementBar, SocialDock } from '@/components/layout/Chrome'
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
 import { MotionRoot } from '@/components/motion/MotionRoot'
+import { RouteTransition } from '@/components/motion/RouteTransition'
 import { PRELOADER_INLINE_SCRIPT } from '@/components/motion/preloader-script'
 import { routing, type Locale } from '@/i18n/routing'
 import { contactLinks } from '@/lib/contact'
 import { motionEnabled } from '@/lib/motion-flags'
+import { analyticsConfig } from '@/lib/analytics'
 import { isOrderable } from '@/lib/availability'
 import { getKits, getSiteSettings } from '@/lib/data'
 import { resolveImage } from '@/lib/media'
@@ -60,6 +64,8 @@ export default async function LocaleLayout({ children, params }: Props) {
   if (!hasLocale(routing.locales, locale)) notFound()
   setRequestLocale(locale)
 
+  const nonce = (await headers()).get('x-nonce') ?? undefined
+  const analytics = analyticsConfig()
   const t = await getTranslations({ locale, namespace: 'common' })
   const [settings, kits] = await Promise.all([getSiteSettings(locale as Locale), getKits(locale as Locale)])
   const c = contactLinks(settings)
@@ -111,7 +117,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       <body className="min-h-dvh">
         {motionEnabled('preloader') ? (
           // Must run before first paint so the overlay never flashes in or out. Home page only.
-          <script dangerouslySetInnerHTML={{ __html: PRELOADER_INLINE_SCRIPT }} />
+          <script nonce={nonce} dangerouslySetInnerHTML={{ __html: PRELOADER_INLINE_SCRIPT }} />
         ) : null}
         <NextIntlClientProvider>
           <CartProvider catalog={catalog} rules={rules}>
@@ -128,9 +134,14 @@ export default async function LocaleLayout({ children, params }: Props) {
           <OrderSticker label={t('order')} />
           <SocialDock settings={settings} />
           <MotionRoot />
+          <RouteTransition />
           </CartProvider>
         </NextIntlClientProvider>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(org) }} />
+        {analytics ? (
+          // Cookieless analytics, only when the owner has configured a provider (docs/ANALYTICS.md).
+          <Script src={analytics.src} strategy="afterInteractive" nonce={nonce} {...analytics.attrs} />
+        ) : null}
       </body>
     </html>
   )

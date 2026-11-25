@@ -9,7 +9,13 @@ const dirname = path.dirname(__filename)
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
+// Site-wide security headers (the CSP itself is per-request, set in src/proxy.ts).
 const securityHeaders = [
+  { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
+  // HSTS only once the site is served over HTTPS (browsers ignore it on http anyway).
+  ...((process.env.NEXT_PUBLIC_SITE_URL || '').startsWith('https://')
+    ? [{ key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' }]
+    : []),
   { key: 'X-Content-Type-Options', value: 'nosniff' },
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
   { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
