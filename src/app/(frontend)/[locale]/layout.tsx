@@ -6,12 +6,15 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import type { ReactNode } from 'react'
 
-import { AnnouncementBar, OrderSticker, SocialDock } from '@/components/layout/Chrome'
+import { CartProvider } from '@/components/cart/CartProvider'
+import { OrderSticker } from '@/components/cart/CartUI'
+import { AnnouncementBar, SocialDock } from '@/components/layout/Chrome'
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
 import { routing, type Locale } from '@/i18n/routing'
 import { contactLinks } from '@/lib/contact'
-import { getSiteSettings } from '@/lib/data'
+import { isOrderable } from '@/lib/availability'
+import { getKits, getSiteSettings } from '@/lib/data'
 import { resolveImage } from '@/lib/media'
 import { absoluteUrl, buildMetadata, jsonLd, siteUrl } from '@/lib/seo'
 import { bodyFont, displayFont } from '@/styles/fonts'
@@ -55,8 +58,27 @@ export default async function LocaleLayout({ children, params }: Props) {
   setRequestLocale(locale)
 
   const t = await getTranslations({ locale, namespace: 'common' })
-  const settings = await getSiteSettings(locale as Locale)
+  const [settings, kits] = await Promise.all([getSiteSettings(locale as Locale), getKits(locale as Locale)])
   const c = contactLinks(settings)
+  const ordersOpen = settings.ordersOpen !== false
+  const catalog = kits.map((k) => {
+    const img = resolveImage(k.heroImage, 'thumb')
+    return {
+      id: k.id,
+      slug: k.slug,
+      title: k.title,
+      price: typeof k.priceMKD === 'number' ? k.priceMKD : null,
+      orderable: isOrderable(k, true),
+      image: img ? { src: img.src, width: img.width, height: img.height, alt: img.alt } : null,
+    }
+  })
+  const rules = {
+    ordersOpen,
+    ordersClosedMessage: settings.ordersClosedMessage ?? null,
+    maxQuantityPerLine: settings.maxQuantityPerLine ?? 5,
+    shippingFee: typeof settings.shippingFlatFee === 'number' ? settings.shippingFlatFee : null,
+    shippingNote: settings.shippingNote ?? null,
+  }
 
   const org = {
     '@context': 'https://schema.org',
@@ -85,6 +107,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     <html lang={locale} className={`${displayFont.variable} ${bodyFont.variable}`}>
       <body className="min-h-dvh">
         <NextIntlClientProvider>
+          <CartProvider catalog={catalog} rules={rules}>
           <a
             href="#main"
             className="bg-orange text-navy sr-only z-[100] rounded-full px-4 py-2 font-bold focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
@@ -95,8 +118,9 @@ export default async function LocaleLayout({ children, params }: Props) {
           <Header locale={locale} />
           {children}
           <Footer locale={locale} settings={settings} />
-          <OrderSticker locale={locale} />
+          <OrderSticker label={t('order')} />
           <SocialDock settings={settings} />
+          </CartProvider>
         </NextIntlClientProvider>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(org) }} />
       </body>

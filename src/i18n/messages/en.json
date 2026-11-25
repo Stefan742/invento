@@ -7,7 +7,11 @@
   "common": {
     "skipToContent": "Skip to content",
     "slogan": "BUILD. DISCOVER. CREATE.",
-    "sloganWords": ["BUILD.", "DISCOVER.", "CREATE."],
+    "sloganWords": [
+      "BUILD.",
+      "DISCOVER.",
+      "CREATE."
+    ],
     "order": "Order",
     "addToCart": "Add to cart",
     "cart": "Cart",
@@ -86,10 +90,22 @@
     "yourBuildHere": "Your build here",
     "noKitsYet": "The boxes will be here soon.",
     "steps": [
-      { "title": "Pick a box", "body": "Choose the build you like." },
-      { "title": "Send your order", "body": "Fill in a short form, no online payment." },
-      { "title": "We confirm on Viber", "body": "We'll message you the details and delivery." },
-      { "title": "Build it!", "body": "You pay on delivery. Open the box and start." }
+      {
+        "title": "Pick a box",
+        "body": "Choose the build you like."
+      },
+      {
+        "title": "Send your order",
+        "body": "Fill in a short form, no online payment."
+      },
+      {
+        "title": "We confirm on Viber",
+        "body": "We'll message you the details and delivery."
+      },
+      {
+        "title": "Build it!",
+        "body": "You pay on delivery. Open the box and start."
+      }
     ],
     "testimonialOf": "Testimonial {n} of {total}"
   },
@@ -106,7 +122,6 @@
     "availability": "Availability",
     "available": "Available",
     "quantity": "Quantity",
-    "orderingSoon": "Ordering on the website opens soon. Until then, message us on Viber or Instagram.",
     "notOrderable": "This box can't be ordered right now."
   },
   "gallery": {
@@ -135,8 +150,7 @@
     "instagram": "Instagram",
     "email": "Email",
     "phone": "Phone",
-    "city": "City",
-    "formSoon": "The message form is on its way."
+    "city": "City"
   },
   "notFound": {
     "title": "OOPS!",
@@ -150,6 +164,96 @@
   },
   "cart": {
     "open": "Open cart",
-    "items": "{count, plural, =0 {Empty cart} one {# item} other {# items}}"
+    "items": "{count, plural, =0 {Empty cart} one {# item} other {# items}}",
+    "title": "CART",
+    "empty": "Your cart is empty.",
+    "browse": "See the boxes",
+    "remove": "Remove {title}",
+    "decrease": "Fewer",
+    "increase": "More",
+    "quantityOf": "Quantity for {title}",
+    "subtotal": "Subtotal",
+    "total": "Total",
+    "shipping": "Delivery",
+    "totalOnViber": "We will confirm the total on Viber.",
+    "shippingOnViber": "We confirm the delivery cost on Viber.",
+    "checkout": "Continue to order",
+    "unavailable": "Can't be ordered: {title}",
+    "added": "{title} was added to your cart.",
+    "maxReached": "Maximum {max} of one box.",
+    "close": "Close cart"
+  },
+  "order": {
+    "title": "ORDER",
+    "intro": "A short form, no online payment. We will message you on Viber to confirm the order.",
+    "summary": "Your order",
+    "payOnDelivery": "Pay on delivery",
+    "yourDetails": "Your details",
+    "fields": {
+      "customerName": "Full name",
+      "phone": "Phone (Viber)",
+      "email": "Email (optional)",
+      "city": "City",
+      "address": "Delivery address",
+      "notes": "Note (optional)",
+      "preferredContact": "How should we contact you?",
+      "privacyConsent": "I agree that my details are used for this order, as described in the <link>privacy policy</link>."
+    },
+    "contact": {
+      "viber": "Viber",
+      "phone": "Phone call",
+      "email": "Email"
+    },
+    "hints": {
+      "phone": "e.g. 070 123 456"
+    },
+    "required": "required",
+    "submit": "Send order",
+    "submitting": "Sending…",
+    "errors": {
+      "required": "This field is required.",
+      "tooShort": "Please enter a bit more.",
+      "tooLong": "This is too long.",
+      "phone": "Please enter a valid phone number.",
+      "email": "Please enter a valid email.",
+      "consent": "We need your consent.",
+      "quantity": "Invalid quantity.",
+      "cartEmpty": "Your cart is empty.",
+      "stock": "Not enough in stock for: {kits}. Lower the quantity or remove it.",
+      "unavailable": "Can't be ordered right now: {kits}.",
+      "paused": "We're not taking orders right now. Please check back soon.",
+      "rate_limited": "Too many attempts. Please wait a few minutes and try again.",
+      "spam": "Something was off with the form. Please refresh the page and try again.",
+      "expired": "The form expired. Please refresh the page and try again.",
+      "captcha": "Please confirm you are not a robot.",
+      "server": "Something went wrong. Please try again or message us on Viber.",
+      "network": "No connection. Check your internet and try again."
+    },
+    "honeypot": "Leave this field empty"
+  },
+  "success": {
+    "title": "THANK YOU!",
+    "lead": "We received your order.",
+    "ref": "Order number",
+    "items": "What you ordered",
+    "next": "What happens next",
+    "defaultNext": "We'll message you on Viber to confirm the order and delivery. You pay on delivery.",
+    "viber": "Open Viber",
+    "copy": "Copy order summary",
+    "copied": "Copied! Paste it into Viber.",
+    "copyHint": "Copy the short summary and paste it into a chat with us.",
+    "instagram": "Message us on Instagram",
+    "orderWord": "Order",
+    "notFound": "We couldn't find this order."
+  },
+  "contactForm": {
+    "title": "WRITE TO US",
+    "name": "Name",
+    "contact": "Phone or email",
+    "message": "Message",
+    "send": "Send message",
+    "sending": "Sending…",
+    "sent": "Thank you! We will reply soon.",
+    "privacy": "We only use your message to reply to you."
   }
 }

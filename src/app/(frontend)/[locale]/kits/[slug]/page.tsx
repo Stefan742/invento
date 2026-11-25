@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 
+import { AddToCart } from '@/components/cart/CartUI'
 import { Lightbox, type LightboxPhoto } from '@/components/gallery/Lightbox'
 import { Illustration } from '@/components/illustrations/Illustration'
 import { KitCard } from '@/components/kits/KitCard'
@@ -131,23 +132,19 @@ export default async function KitPage({ params }: Props) {
           <KitAvailability kit={kit} locale={locale} />
 
           <div className="bg-yellow border-navy rounded-2xl border-[3px] p-5 shadow-[5px_5px_0_0_var(--color-navy)]">
-            {!ordersOpen ? (
-              <p className="font-bold">{settings.ordersClosedMessage || tc('ordersPaused')}</p>
-            ) : availability !== 'available' ? (
-              <p className="font-bold">{t('notOrderable')}</p>
-            ) : (
-              <>
-                <p className="font-semibold">{t('orderingSoon')}</p>
-                <div className="mt-4 flex flex-wrap gap-3">
-                  <ExternalButton href={c.viber} variant="orange" disabledLabel={tc('contactSoon')}>
-                    {tc('viberCta')}
-                  </ExternalButton>
-                  <ExternalButton href={c.instagram} variant="paper" disabledLabel={tc('contactSoon')}>
-                    {tc('instagramCta')}
-                  </ExternalButton>
-                </div>
-              </>
-            )}
+            <AddToCart
+              kitId={kit.id}
+              title={kit.title}
+              orderable={availability === 'available'}
+              blockedMessage={t('notOrderable')}
+            />
+            {!ordersOpen || availability !== 'available' ? (
+              <div className="mt-4 flex flex-wrap gap-3">
+                <ExternalButton href={c.viber} variant="paper" disabledLabel={tc('contactSoon')}>
+                  {tc('viberCta')}
+                </ExternalButton>
+              </div>
+            ) : null}
             <p className="mt-3 text-sm font-semibold">{tc('payOnDelivery')}</p>
           </div>
 

@@ -3,10 +3,12 @@ import { getTranslations } from 'next-intl/server'
 
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
+import { getAvailability } from '@/lib/availability'
 import { tiltFor } from '@/lib/layout'
 import { resolveImage } from '@/lib/media'
 import type { Kit } from '@/payload-types'
 
+import { AddToCart } from '../cart/CartUI'
 import { Illustration } from '../illustrations/Illustration'
 import { Ribbon } from '../ui'
 import { KitAvailability, KitChips, KitPrice } from './KitMeta'
@@ -49,12 +51,16 @@ export async function KitCard({ kit, locale, index = 0 }: { kit: Kit; locale: Lo
           <KitAvailability kit={kit} locale={locale} />
           <div className="flex items-center justify-between gap-3">
             <KitPrice kit={kit} locale={locale} className="text-xl" />
-            <span
-              aria-hidden="true"
-              className="bg-orange border-navy grid h-12 w-12 place-items-center rounded-full border-[3px] text-xl font-black transition-transform group-hover:rotate-[-20deg]"
-            >
-              →
-            </span>
+            {getAvailability(kit) === 'available' ? (
+              <AddToCart kitId={kit.id} title={kit.title} orderable compact />
+            ) : (
+              <span
+                aria-hidden="true"
+                className="bg-orange border-navy grid h-12 w-12 place-items-center rounded-full border-[3px] text-xl font-black transition-transform group-hover:rotate-[-20deg]"
+              >
+                →
+              </span>
+            )}
           </div>
         </div>
       </div>

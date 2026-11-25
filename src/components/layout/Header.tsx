@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import type { Locale } from '@/i18n/routing'
 
+import { CartButton } from '../cart/CartUI'
 import { Illustration } from '../illustrations/Illustration'
 import { LanguageSwitch } from './LanguageSwitch'
 import { MobileMenu } from './MobileMenu'
@@ -54,6 +55,7 @@ export async function Header({ locale }: { locale: Locale }) {
         </nav>
         <div className="flex items-center gap-2">
           <LanguageSwitch label={tc('language')} className="hidden sm:flex" />
+          <CartButton />
           <MobileMenu
             items={items}
             openLabel={tc('openMenu')}

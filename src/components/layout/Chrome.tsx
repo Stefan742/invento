@@ -1,7 +1,4 @@
-import { getTranslations } from 'next-intl/server'
-
 import { Link } from '@/i18n/navigation'
-import type { Locale } from '@/i18n/routing'
 import { contactLinks } from '@/lib/contact'
 import type { SiteSetting } from '@/payload-types'
 
@@ -28,19 +25,6 @@ export function AnnouncementBar({ settings }: { settings: SiteSetting }) {
         )}
       </div>
     </div>
-  )
-}
-
-/** Tilted "Порачај / Order" sticker, always on screen. M3 makes it open the cart drawer. */
-export async function OrderSticker({ locale }: { locale: Locale }) {
-  const t = await getTranslations({ locale, namespace: 'common' })
-  return (
-    <Link
-      href="/kits"
-      className="bg-orange text-navy border-navy display fixed right-4 bottom-4 z-30 grid min-h-14 rotate-[-8deg] place-items-center rounded-full border-[3px] px-6 text-2xl shadow-[4px_4px_0_0_var(--color-navy)] transition-transform hover:rotate-[-3deg] sm:right-6 sm:bottom-6 sm:text-3xl"
-    >
-      {t('order')}
-    </Link>
   )
 }
 
