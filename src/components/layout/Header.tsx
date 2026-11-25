@@ -34,7 +34,7 @@ export async function Header({ locale }: { locale: Locale }) {
   const items = await navItems(locale)
 
   return (
-    <header className="bg-navy text-paper sticky top-0 z-40 [--ink:var(--color-paper)]">
+    <header data-site-header className="bg-navy text-paper sticky top-0 z-40 [--ink:var(--color-paper)]">
       <div className="container-x flex h-[var(--header-h)] items-center justify-between gap-4">
         <Link href="/" aria-label="INVENTO, home" className="rounded-full">
           <Logo />

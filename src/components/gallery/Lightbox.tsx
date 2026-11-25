@@ -30,6 +30,7 @@ export function Lightbox({
   variant = 'grid',
   listClassName,
   itemStyles,
+  itemData,
 }: {
   photos: LightboxPhoto[]
   labels: Labels
@@ -37,6 +38,8 @@ export function Lightbox({
   variant?: 'grid' | 'taped'
   listClassName?: string
   itemStyles?: CSSProperties[]
+  /** Optional per-item drift speed (home gallery parallax, M4). */
+  itemData?: string[]
 }) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const [index, setIndex] = useState<number | null>(null)
@@ -73,7 +76,7 @@ export function Lightbox({
     <>
       <ul className={listClassName}>
         {photos.map((p, i) => (
-          <li key={p.id} style={itemStyles?.[i]}>
+          <li key={p.id} style={itemStyles?.[i]} data-drift={itemData?.[i]}>
             <a
               href={p.src}
               onClick={(e) => {
@@ -100,6 +103,7 @@ export function Lightbox({
       <dialog
         ref={dialogRef}
         aria-label={current?.alt}
+        data-anim="pop"
         className="bg-navy/95 text-paper m-0 h-dvh max-h-none w-screen max-w-none p-0 backdrop:bg-black/70"
         onClick={(e) => {
           if (e.target === e.currentTarget) close()

@@ -66,6 +66,8 @@ export function MobileMenu({
         aria-modal="true"
         aria-label={menuLabel}
         hidden={!open}
+        data-anim="lid"
+        data-lenis-prevent
         // Any link inside (nav items, language switch) closes the menu.
         onClickCapture={(e) => {
           if ((e.target as HTMLElement).closest('a')) setOpen(false)

@@ -129,6 +129,7 @@ export function CartDrawer() {
     <dialog
       ref={ref}
       aria-labelledby="cart-title"
+      data-anim="drawer"
       onClose={close}
       onClick={(e) => {
         if (e.target === e.currentTarget) close()
@@ -144,7 +145,7 @@ export function CartDrawer() {
             ×
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto px-5">
+        <div className="flex-1 overflow-y-auto px-5" data-lenis-prevent>
           {hydrated && lines.length ? (
             <CartLines />
           ) : (

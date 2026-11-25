@@ -44,7 +44,7 @@ export function TestimonialsRuler({
   return (
     <div>
       <figure id="testimonial-panel" role="tabpanel" className="min-h-[14rem]" aria-live="polite">
-        <blockquote className="display text-yellow text-[clamp(2.25rem,6.5vw,5.5rem)] leading-[0.95]">
+        <blockquote key={current.id} className="quote-in display text-yellow text-[clamp(2.25rem,6.5vw,5.5rem)] leading-[0.95]">
           “{current.quote}”
         </blockquote>
         <figcaption className="mt-5 flex flex-wrap items-center gap-3 text-lg font-semibold">
