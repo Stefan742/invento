@@ -1,0 +1,77 @@
+import { getTranslations } from 'next-intl/server'
+
+import type { Locale } from '@/i18n/routing'
+import type { HomePage } from '@/payload-types'
+
+import { Illustration } from '../illustrations/Illustration'
+import { ButtonLink } from '../ui'
+import { Section } from './Section'
+
+export async function Hero({ locale, home }: { locale: Locale; home: HomePage }) {
+  const t = await getTranslations({ locale, namespace: 'common' })
+  const th = await getTranslations({ locale, namespace: 'home' })
+  const other = locale === 'mk' ? 'en' : 'mk'
+  const tOther = await getTranslations({ locale: other, namespace: 'common' })
+  const defaults = t.raw('sloganWords') as string[]
+  const words = [home.heroWord1 || defaults[0], home.heroWord2 || defaults[1], home.heroWord3 || defaults[2]]
+
+  return (
+    <Section world="navy" anchor="hero" labelledBy="hero-title" className="min-h-[calc(100dvh-var(--header-h))]" gears={false}>
+      <div className="container-x relative flex min-h-[calc(100dvh-var(--header-h))] flex-col justify-center py-10">
+        <h1
+          id="hero-title"
+          className="display grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 text-[clamp(3.4rem,13.5vw,12rem)] [grid-template-areas:'w1_w1'_'box_w2'_'w3_w3']"
+        >
+          <span className="text-paper [grid-area:w1]" data-hero-word="1">
+            {words[0]}
+          </span>
+          {/* The box sits in the middle of the slogan. Parts hover above the open lid. */}
+          <span aria-hidden="true" className="relative block w-[min(30vw,17rem)] justify-self-center [grid-area:box] [--ink:var(--color-paper)]" data-hero-box>
+            <Illustration name="gear" className="absolute -top-[14%] left-[2%] w-[24%] rotate-[-12deg]" />
+            <Illustration name="bulb" className="absolute -top-[30%] left-[38%] w-[22%] rotate-[6deg]" />
+            <Illustration name="rocket" className="absolute -top-[18%] right-[0%] w-[26%]" />
+            <Illustration name="box" className="w-full" />
+          </span>
+          <span className="text-orange justify-self-end [grid-area:w2]" data-hero-word="2">
+            {words[1]}
+          </span>
+          <span className="text-yellow [grid-area:w3]" data-hero-word="3">
+            {words[2]}
+          </span>
+        </h1>
+
+        <div className="relative z-10 mt-8 flex flex-col gap-5 sm:mt-12 sm:max-w-xl">
+          <p className="text-xl font-semibold sm:text-2xl">{home.heroSubline || th('heroSubline')}</p>
+          <p className="text-paper/70 text-sm font-bold tracking-[0.2em]" lang={other}>
+            {tOther('slogan')}
+          </p>
+          <div className="flex flex-wrap items-center gap-4">
+            <ButtonLink href="/kits" variant="orange" className="text-lg">
+              {t('seeTheBoxes')}
+            </ButtonLink>
+            <a href="#intro" className="inline-flex min-h-12 items-center gap-2 font-semibold underline underline-offset-4">
+              {t('scrollCue')} <span aria-hidden="true">↓</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </Section>
+  )
+}
+
+export async function Intro({ locale, home }: { locale: Locale; home: HomePage }) {
+  const th = await getTranslations({ locale, namespace: 'home' })
+  return (
+    <Section world="orange" id="intro" anchor="intro">
+      <div className="container-x grid items-center gap-10 py-24 sm:py-32 lg:grid-cols-[1fr_auto]">
+        <p className="max-w-[24ch] text-[clamp(1.75rem,4.6vw,3.6rem)] leading-[1.1] font-bold" data-track-anchor="intro-loop">
+          {home.intro || th('intro')}
+        </p>
+        <div aria-hidden="true" className="relative mx-auto w-56 sm:w-72">
+          <Illustration name="catapult" className="w-full" />
+          <Illustration name="marble" className="absolute -top-10 left-2 w-12" />
+        </div>
+      </div>
+    </Section>
+  )
+}
