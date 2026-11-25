@@ -7,7 +7,7 @@ const baseURL = process.env.E2E_BASE_URL || `http://localhost:${PORT}`
 export default defineConfig({
   testDir: './tests/e2e',
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 2 : 1, // local dev server compiles on first hit; one retry absorbs that
   workers: process.env.CI ? 1 : undefined,
   reporter: process.env.CI ? 'github' : 'list',
   timeout: 60_000,
@@ -18,13 +18,13 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      testIgnore: /screenshots\.spec\.ts/,
+      testIgnore: /(screenshots|recordings)\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },
     },
     {
-      // `pnpm screenshots`: full-page review screenshots (390 / 820 / 1440) for the owner.
+      // `pnpm screenshots`: review screenshots (390 / 820 / 1440) and motion recordings for the owner.
       name: 'screenshots',
-      testMatch: /screenshots\.spec\.ts/,
+      testMatch: /(screenshots|recordings)\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] },
     },
   ],
