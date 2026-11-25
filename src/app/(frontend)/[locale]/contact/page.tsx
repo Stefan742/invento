@@ -2,8 +2,10 @@ import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { PageHeader } from '@/components/layout/PageHeader'
+import { ContactForm } from '@/components/order/ContactForm'
 import { ExternalButton } from '@/components/ui'
 import type { Locale } from '@/i18n/routing'
+import { issueFormToken } from '@/lib/antispam'
 import { contactLinks } from '@/lib/contact'
 import { getSiteSettings } from '@/lib/data'
 import { buildMetadata } from '@/lib/seo'
@@ -54,7 +56,9 @@ export default async function ContactPage({ params }: Props) {
               {t('city')}: {settings.city}
             </p>
           ) : null}
-          <p className="mt-8 text-sm opacity-80">{t('formSoon')}</p>
+          <div className="mt-14">
+            <ContactForm formToken={issueFormToken()} />
+          </div>
         </div>
       </section>
     </main>
