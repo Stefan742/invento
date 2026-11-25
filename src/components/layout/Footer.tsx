@@ -80,7 +80,15 @@ export async function Footer({ locale, settings }: { locale: Locale; settings: S
           </div>
         </div>
       </div>
-      <div className="container-x" aria-hidden="true">
+      <div className="container-x relative overflow-hidden" aria-hidden="true" data-footer-wordmark>
+        {/* The box lid closes over the wordmark at the very bottom (M4). Hidden above until JS moves it. */}
+        <div
+          data-footer-lid
+          className="bg-navy-90 border-orange absolute inset-x-[2%] top-0 z-10 h-[34%] origin-top rounded-b-2xl border-b-[6px]"
+          style={{ transform: 'translateY(-105%)' }}
+        >
+          <span className="bg-orange absolute bottom-3 left-1/2 block h-2 w-24 -translate-x-1/2 rounded-full" />
+        </div>
         <p className="display text-paper -mb-[0.12em] text-center text-[clamp(4.5rem,24vw,22rem)] leading-[0.8] select-none">
           INVENTO
         </p>

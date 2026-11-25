@@ -38,7 +38,7 @@ export async function PickYourBox({ locale, kits, title }: { locale: Locale; kit
   const allSoldOut = kits.length > 0 && kits.every((k) => getAvailability(k) === 'sold_out')
 
   return (
-    <Section world="paper" id="pick" anchor="pick" labelledBy="pick-title">
+    <Section world="paper" id="pick" anchor="pick" labelledBy="pick-title" side="right">
       <div className="container-x py-20 sm:py-28">
         <GiantTitle id="pick-title">{title || th('pickTitle')}</GiantTitle>
         {allSoldOut ? (

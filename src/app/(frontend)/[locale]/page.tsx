@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 
+import { HomeMotion } from '@/components/motion/HomeMotion'
+import { Preloader } from '@/components/motion/Preloader'
 import { Hero, Intro } from '@/components/sections/Hero'
 import { BuildsGallery, ParentsSay, Questions } from '@/components/sections/HomeLower'
 import { HowItWorks } from '@/components/sections/HowItWorks'
@@ -16,6 +18,7 @@ import {
   getSiteSettings,
   getTestimonials,
 } from '@/lib/data'
+import { motionEnabled } from '@/lib/motion-flags'
 import { alternatesFor, jsonLd } from '@/lib/seo'
 
 type Props = { params: Promise<{ locale: Locale }> }
@@ -42,6 +45,8 @@ export default async function HomePage({ params }: Props) {
   const titles = home.titles ?? {}
   const show = (v: boolean | null | undefined) => v !== false
   const tf = await getTranslations({ locale, namespace: 'faq' })
+  const tp = await getTranslations({ locale, namespace: 'preloader' })
+  const tc = await getTranslations({ locale, namespace: 'common' })
 
   const topFaqs = faqs.slice(0, 5)
   const faqLd = topFaqs.length
@@ -59,7 +64,10 @@ export default async function HomePage({ params }: Props) {
     : null
 
   return (
-    <main id="main" data-home>
+    <>
+    {motionEnabled('preloader') ? <Preloader line={tp('line')} skipLabel={tc('skip')} /> : null}
+    {/* isolate: decorations, the marble-track canvas and content stack inside <main> (M4). */}
+    <main id="main" data-home className="relative isolate">
       <Hero locale={locale} home={home} />
       <Intro locale={locale} home={home} />
       {show(s.showShowcase) ? <Showcase locale={locale} kits={featured} title={titles.showcase} /> : null}
@@ -75,6 +83,8 @@ export default async function HomePage({ params }: Props) {
         <BuildsGallery locale={locale} builds={builds} settings={settings} title={titles.gallery} />
       ) : null}
       {faqLd ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqLd) }} /> : null}
+      <HomeMotion />
     </main>
+    </>
   )
 }

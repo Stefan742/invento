@@ -17,7 +17,7 @@ export async function HowItWorks({ locale, home, title }: { locale: Locale; home
   const steps = cms.length === 4 ? cms : defaults
 
   return (
-    <Section world="teal" id="how-it-works" anchor="how-it-works" labelledBy="hiw-title">
+    <Section world="teal" id="how-it-works" anchor="how-it-works" labelledBy="hiw-title" side="left">
       <div className="container-x py-20 sm:py-28">
         <GiantTitle id="hiw-title">{title || th('howItWorksTitle')}</GiantTitle>
         <ol className="mt-14 grid gap-10 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4 lg:gap-0">

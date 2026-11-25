@@ -87,13 +87,13 @@ export function OrderSticker({ label }: { label: string }) {
     'bg-orange text-navy border-navy display fixed right-4 bottom-4 z-30 grid min-h-14 rotate-[-8deg] place-items-center rounded-full border-[3px] px-6 text-2xl shadow-[4px_4px_0_0_var(--color-navy)] transition-transform hover:rotate-[-3deg] sm:right-6 sm:bottom-6 sm:text-3xl'
   if (hydrated && cartCount(lines) > 0) {
     return (
-      <button type="button" onClick={open} className={cls}>
+      <button type="button" onClick={open} className={cls} data-order-sticker>
         {label}
       </button>
     )
   }
   return (
-    <Link href="/kits" className={cls}>
+    <Link href="/kits" className={cls} data-order-sticker>
       {label}
     </Link>
   )

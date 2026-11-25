@@ -20,17 +20,19 @@ export async function Showcase({ locale, kits, title }: { locale: Locale; kits: 
   if (!kits.length) return null
 
   return (
-    <Section world="yellow" anchor="showcase" labelledBy="showcase-title">
+    <Section world="yellow" anchor="showcase" labelledBy="showcase-title" side="right">
       <div className="container-x pt-20 sm:pt-28">
         <div className="relative inline-block">
           <GiantTitle id="showcase-title">{title || th('showcaseTitle')}</GiantTitle>
           <Illustration
             name="gear-orange"
             className="absolute -top-6 -right-10 w-16 rotate-12 sm:-right-16 sm:w-24"
+            data-marble-trigger="spin"
           />
         </div>
       </div>
       <ul
+        data-showcase-track
         className="mt-10 flex snap-x snap-mandatory gap-6 overflow-x-auto px-[max(1rem,calc((100vw-88rem)/2+3rem))] pb-20 [scrollbar-width:thin] sm:pb-28"
         aria-label={title || th('showcaseTitle')}
       >
@@ -59,14 +61,16 @@ export async function Showcase({ locale, kits, title }: { locale: Locale; kits: 
                     )}
                   </div>
                   {/* orbiting info buttons */}
-                  <span className="bg-paper border-navy absolute top-[2%] left-[-4%] grid h-20 w-20 place-items-center rounded-full border-[3px] text-center text-sm leading-tight font-bold shadow-[3px_3px_0_0_var(--color-navy)]">
+                  <span className="bob bg-paper border-navy absolute top-[2%] left-[-4%] grid h-20 w-20 place-items-center rounded-full border-[3px] text-center text-sm leading-tight font-bold shadow-[3px_3px_0_0_var(--color-navy)]">
                     {t('ages', { min: kit.ageMin ?? 6, max: kit.ageMax ?? 12 })}
                   </span>
-                  <span className="bg-paper border-navy absolute right-[-4%] bottom-[18%] grid h-20 w-20 place-items-center rounded-full border-[3px] shadow-[3px_3px_0_0_var(--color-navy)]">
+                  <span style={{ animationDelay: '-1.1s' }}
+                    className="bob bg-paper border-navy absolute right-[-4%] bottom-[18%] grid h-20 w-20 place-items-center rounded-full border-[3px] shadow-[3px_3px_0_0_var(--color-navy)]">
                     <GearRating value={kit.difficulty ?? 1} label={t('difficultyValue', { n: kit.difficulty ?? 1 })} />
                   </span>
                   {kit.buildTimeMinutes ? (
-                    <span className="bg-teal border-navy absolute bottom-[-2%] left-[14%] grid h-20 w-20 place-items-center rounded-full border-[3px] text-center text-sm font-bold shadow-[3px_3px_0_0_var(--color-navy)]">
+                    <span style={{ animationDelay: '-2.2s' }}
+                      className="bob bg-teal border-navy absolute bottom-[-2%] left-[14%] grid h-20 w-20 place-items-center rounded-full border-[3px] text-center text-sm font-bold shadow-[3px_3px_0_0_var(--color-navy)]">
                       ⏱ {t('minutes', { n: kit.buildTimeMinutes })}
                     </span>
                   ) : null}

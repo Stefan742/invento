@@ -26,7 +26,7 @@ export async function ParentsSay({
   const t = await getTranslations({ locale, namespace: 'common' })
   const th = await getTranslations({ locale, namespace: 'home' })
   return (
-    <Section world="navy" anchor="parents" labelledBy="parents-title">
+    <Section world="navy" anchor="parents" labelledBy="parents-title" side="left">
       <div className="container-x py-20 sm:py-28">
         <GiantTitle id="parents-title" className="text-paper mb-12">
           {title || th('testimonialsTitle')}
@@ -82,7 +82,7 @@ export async function Questions({
   const th = await getTranslations({ locale, namespace: 'home' })
   const c = contactLinks(settings)
   return (
-    <Section world="orange" id="questions" anchor="questions" labelledBy="questions-title" gears={false}>
+    <Section world="orange" id="questions" anchor="questions" labelledBy="questions-title" gears={false} side="right">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10" data-physics-pile>
         {PILE.map((p, i) => (
           <Illustration
@@ -150,7 +150,7 @@ export async function BuildsGallery({
   const slots = driftLayout(Math.max(photos.length, 6))
 
   return (
-    <Section world="paper" id="builds" anchor="gallery" labelledBy="gallery-title">
+    <Section world="paper" id="builds" anchor="gallery" labelledBy="gallery-title" side="left">
       <div className="container-x py-20 sm:py-28">
         <GiantTitle id="gallery-title" className="text-center">
           {title || th('galleryTitle')}
@@ -183,6 +183,7 @@ export async function BuildsGallery({
             itemStyles={photos.map((_, i) => ({
               transform: `rotate(${slots[i].rotate}deg) translateY(${(slots[i].y % 10) * 4}px)`,
             }))}
+            itemData={photos.map((_, i) => String(slots[i].speed.toFixed(2)))}
           />
         ) : (
           // No published builds yet: illustrated "Your build here" frames keep the section's rhythm.
