@@ -5,7 +5,7 @@ Bilingual (Macedonian default, English) website and order-request shop for **INV
 - **Stack:** Next.js 16 (App Router) + Payload CMS 3 (admin at `/admin`) + PostgreSQL, TypeScript strict, Tailwind CSS 4, next-intl 4.
 - **Full spec:** [`docs/brief/`](docs/brief/START-HERE.md). Working rules: [`CLAUDE.md`](CLAUDE.md).
 - **Living logs:** [`DECISIONS.md`](DECISIONS.md), [`OWNER_TODO.md`](OWNER_TODO.md), [`ASSETS_NEEDED.md`](ASSETS_NEEDED.md).
-- **Status:** M0–M2 done (CMS + static site). Gate 1: waiting for owner review. See [Milestones](#milestones).
+- **Status:** M0–M3 done. The site is launchable: CMS, bilingual site, cart and order requests. Next: M4 signature motion. See [Milestones](#milestones).
 
 ## Requirements
 
@@ -34,8 +34,10 @@ Admin: <http://localhost:3000/admin>, sign in with `ADMIN_EMAIL` / `ADMIN_PASSWO
 | `NEXT_PUBLIC_SITE_URL` | Absolute site URL (canonical links, sitemap, OG) |
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD` | First admin user, created by `pnpm seed` |
 | `SHOW_PLACEHOLDERS` | Show seeded sample content. `true` in dev, **must be `false` in production** |
-| `ORDER_NOTIFY_EMAIL`, `RESEND_API_KEY`, `EMAIL_FROM_*` | Order emails (M3) |
-| `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY` | Optional spam protection (M3) |
+| `ORDER_NOTIFY_EMAIL` | Inbox for new-order and contact-form emails |
+| `RESEND_API_KEY`, `EMAIL_FROM_ADDRESS`, `EMAIL_FROM_NAME` | Email sending via Resend. Without a key, emails are printed to the server console |
+| `ORDER_RATE_LIMIT` | Order requests per IP per 10 minutes (default 5) |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY` | Optional Cloudflare Turnstile on the order form |
 | `S3_*` | Production media storage (M6) |
 
 ## Scripts
@@ -63,6 +65,16 @@ Before finishing any change: `pnpm lint && pnpm typecheck && pnpm test && pnpm b
 
 All pages render on request from data in a tagged cache (`src/lib/data.ts`). Every save in the admin runs a Payload hook (`src/hooks/revalidate.ts`) that expires the matching cache tags, so owner edits are live within seconds and nothing needs a rebuild. Public reads go through Payload's access rules (`overrideAccess: false`): only published content is visible, and seeded `isPlaceholder` content is hidden unless `SHOW_PLACEHOLDERS=true`.
 
+## How an order works
+
+1. Cart (browser only: kit ids + quantities) → `/order` form → `POST /api/order`.
+2. The route validates with the same Zod schema as the form and runs the anti-spam checks. Then, in **one transaction**, it locks each kit row, checks and decrements stock, takes the next `INV-` number from a PostgreSQL sequence, and creates the order.
+3. After commit: public stock is refreshed, the owner gets an email, and the customer gets one if they gave an email.
+4. The customer lands on `/order/<random token>`: reference, items, "Open Viber" and "Copy order summary". No personal data on that page.
+5. In the admin the owner moves the status `new → confirmed → in production → shipped → delivered`, or `cancelled` (puts stock back, once). Orders export to CSV and can be anonymised on request.
+
+Pause all orders: Admin → Site settings → Orders → untick **Orders are open**.
+
 ## Project layout
 
 ```
@@ -87,9 +99,9 @@ docs/screenshots/            review screenshots per milestone
 |---|---|---|
 | M0 | Foundations | ✅ |
 | M1 | CMS and data | ✅ |
-| M2 | Static site | ✅ (Gate 1: owner review) |
-| M3 | Orders (cart, order route, stock, emails) | next |
-| M4 | Signature motion (Gate 2) | |
+| M2 | Static site | ✅ (Gate 1 approved) |
+| M3 | Orders (cart, order route, stock, emails) | ✅ launchable |
+| M4 | Signature motion (Gate 2) | next |
 | M5 | Polish and hardening | |
 | M6 | Deploy and handover (Gate 3 before deploying) | |
 

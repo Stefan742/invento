@@ -10,6 +10,14 @@ Things only you (the owner) can do or decide. Nothing here blocks development; t
 - [ ] **Email** for customers. Also choose the email that receives order notifications (`ORDER_NOTIFY_EMAIL`, M3).
 - [ ] **City** (optional, shown on the contact page).
 
+## Orders and email
+
+- [ ] Create a **Resend** account (or tell us your preferred email provider) and verify a sending domain once you have one. Until then, order emails only appear in the server log.
+- [ ] Choose the inbox that receives **order notifications and contact messages** (`ORDER_NOTIFY_EMAIL`).
+- [ ] Optional: a free **Cloudflare Turnstile** key, if spam ever gets past the built-in checks.
+- [ ] Try the full flow on your phone: add to cart → order form → success page → "Open Viber" / "Copy order summary".
+- [ ] Decide your routine for **cancelled orders** (cancelling puts the stock back automatically, once) and for **data deletion requests** (each order has an "Anonymise personal data" checkbox).
+
 ## Products and prices (Admin → Kits)
 
 - [ ] Decide the launch range (1–3 kits). Replace the three **sample kits** (Mini catapult, Hydraulic arm, Gear machine), or edit them into real ones and **untick "isPlaceholder"**.
