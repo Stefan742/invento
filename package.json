@@ -4,6 +4,7 @@
   "description": "INVENTO: bilingual website and order-request shop for wooden DIY engineering kits (Next.js + Payload CMS + PostgreSQL)",
   "license": "UNLICENSED",
   "type": "module",
+  "packageManager": "pnpm@10.34.9",
   "scripts": {
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
     "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
