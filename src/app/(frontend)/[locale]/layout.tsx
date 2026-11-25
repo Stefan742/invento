@@ -11,8 +11,11 @@ import { OrderSticker } from '@/components/cart/CartUI'
 import { AnnouncementBar, SocialDock } from '@/components/layout/Chrome'
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
+import { MotionRoot } from '@/components/motion/MotionRoot'
+import { PRELOADER_INLINE_SCRIPT } from '@/components/motion/preloader-script'
 import { routing, type Locale } from '@/i18n/routing'
 import { contactLinks } from '@/lib/contact'
+import { motionEnabled } from '@/lib/motion-flags'
 import { isOrderable } from '@/lib/availability'
 import { getKits, getSiteSettings } from '@/lib/data'
 import { resolveImage } from '@/lib/media'
@@ -104,8 +107,12 @@ export default async function LocaleLayout({ children, params }: Props) {
   }
 
   return (
-    <html lang={locale} className={`${displayFont.variable} ${bodyFont.variable}`}>
+    <html lang={locale} className={`${displayFont.variable} ${bodyFont.variable}`} suppressHydrationWarning>
       <body className="min-h-dvh">
+        {motionEnabled('preloader') ? (
+          // Must run before first paint so the overlay never flashes in or out. Home page only.
+          <script dangerouslySetInnerHTML={{ __html: PRELOADER_INLINE_SCRIPT }} />
+        ) : null}
         <NextIntlClientProvider>
           <CartProvider catalog={catalog} rules={rules}>
           <a
@@ -120,6 +127,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           <Footer locale={locale} settings={settings} />
           <OrderSticker label={t('order')} />
           <SocialDock settings={settings} />
+          <MotionRoot />
           </CartProvider>
         </NextIntlClientProvider>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(org) }} />

@@ -255,5 +255,8 @@
     "sending": "Sending…",
     "sent": "Thank you! We will reply soon.",
     "privacy": "We only use your message to reply to you."
+  },
+  "preloader": {
+    "line": "You've landed on a building site. Follow the instructions."
   }
 }
