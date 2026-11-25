@@ -19,7 +19,8 @@ export async function KitCard({ kit, locale, index = 0 }: { kit: Kit; locale: Lo
 
   return (
     <article
-      className="group border-navy bg-paper text-navy relative flex h-full flex-col rounded-3xl border-[3px] shadow-[6px_6px_0_0_var(--color-navy)]"
+      // Whole card shows a focus ring while its title link has keyboard focus.
+      className="group border-navy bg-paper text-navy relative flex h-full flex-col rounded-3xl border-[3px] shadow-[6px_6px_0_0_var(--color-navy)] has-[a:focus-visible]:outline-[3px] has-[a:focus-visible]:outline-offset-4 has-[a:focus-visible]:outline-orange has-[a:focus-visible]:outline"
       style={{ transform: `rotate(${tiltFor(index, 2.5)}deg)` }}
     >
       {kit.featured ? <Ribbon>{t('mostPopular')}</Ribbon> : null}
@@ -41,7 +42,7 @@ export async function KitCard({ kit, locale, index = 0 }: { kit: Kit; locale: Lo
       </div>
       <div className="flex flex-1 flex-col gap-3 p-5">
         <h3 className="display text-4xl">
-          <Link href={`/kits/${kit.slug}`} className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none">
+          <Link href={`/kits/${kit.slug}`} className="after:absolute after:inset-0 after:content-['']">
             {kit.title}
           </Link>
         </h3>
