@@ -59,7 +59,8 @@ Short log of non-obvious choices and why. Newest at the bottom of each milestone
 - **One order route, `POST /api/order`.** It is the only way an order is created. Checks run in order: body size (16 KB) → per-IP rate limit → JSON → shared Zod schema (the same file the form uses, `src/lib/order.ts`) → honeypot → signed form token → optional Turnstile → pause switch → database transaction. Errors return a short code (`stock`, `paused`, `spam`, …) that the form shows in the visitor's language.
 - **Stock without overselling:** inside one Payload transaction the route locks each kit row (`SELECT … FOR UPDATE`, in kit-id order to avoid deadlocks), re-reads the kit, checks it, and decrements through `payload.update`. Going through Payload (not raw SQL) keeps the admin's draft/version record in sync, so the admin always shows the real stock. If any line fails, the whole transaction rolls back. E2E-tested: two simultaneous orders for the last piece → exactly one succeeds.
 - **Owner edits win:** if the owner has a kit open, an order arrives, and the owner then saves the old stock number, the owner's value is kept (as the brief asks). To be explained in the owner guide.
-- **Order reference:** PostgreSQL sequence `order_ref_seq` (created by migration; ensured at runtime in dev, which uses schema push), formatted `INV-0001`. Sequences never roll back, so a failed order leaves a gap: references are unique and never reused, but not gap-free.
+- **Order reference:** PostgreSQL sequence `order_ref_seq`, created by migration and formatted `INV-0001`. Sequences never roll back, so a failed order leaves a gap: references are unique and never reused, but not gap-free.
+  - **M5 fix:** in development, Payload's schema push drops the sequence (it is not in Payload's schema). A recreated sequence restarted at 1 and collided with existing references. Every order now ensures the sequence exists and has caught up with the highest reference already used (`setval(greatest(...))`), and the unique index on `ref` stays the final guard.
 - **Public token:** 24 random bytes (base64url) for the success URL. The success page shows only the reference, items and totals, is `noindex`, and sends no referrer.
 - **Cancel restores stock once** (`beforeChange` hook on Orders, guarded by a hidden `stockRestored` flag, never above the batch size). Un-cancelling does not take stock again; the owner adjusts by hand (the field description says so).
 - **Anti-spam:** honeypot field `website` (visually hidden, `aria-hidden`); **minimum time-to-submit via an HMAC-signed form token** issued when the page renders (≥ 3 s, ≤ 6 h; enforced on the server without trusting the client clock); rate limit 5 requests / 10 min per IP (`ORDER_RATE_LIMIT`); Cloudflare Turnstile only when both keys are set.
@@ -107,3 +108,33 @@ Short log of non-obvious choices and why. Newest at the bottom of each milestone
   - **Note:** headless Chromium rasterises canvas in software, so real phones should do better.
   - **Degrades applied to reach this:** viewport-only track drawing, frame skipping, mobile canvas resolution cap, 8 physics bodies on mobile.
   - **Follow-up (M5):** the full page `load` takes ~18 s on slow 4G; that is page weight (fonts, illustrations, sample images), not motion, and belongs to M5's image and font pass.
+
+## M5: Polish and hardening
+
+- **Page weight (mobile, production build):** home 487 → **407 KB**, kit page 332 KB, order page 356 KB.
+  - **Cart bundle:** the cart drawer (on every page) imported `computeTotals` from the order module, dragging Zod and libphonenumber into the shared bundle. Pure totals moved to `src/lib/totals.ts` (−59 KB JS).
+  - **Fonts:** only the weights used are loaded: display 800 only (900 was never used), and Onest as one variable file per subset, which also gives real 900 weight instead of a synthesised one (−25 KB).
+  - **HTML:** inline SVG illustrations make the HTML 36 KB gzipped. That is acceptable; a sprite sheet would break the animated box lid.
+- **Measured after M5** (headless Chromium, 390 px, 4× CPU throttle + slow 4G):
+  - **Mobile:** 51–54 fps while scrolling the whole page, LCP 2.1–2.3 s, CLS 0.01.
+  - **Desktop:** 60 fps, LCP 0.44 s, CLS 0.
+  - **INP:** not measurable in this lab setup; the only heavy interaction (add to cart) does no network work. Re-check with field data once analytics is on.
+- **Content-Security-Policy (strict, per request):**
+  - **Scripts:** `script-src 'self' 'nonce-…' 'strict-dynamic'` (plus Turnstile and, if configured, the analytics origin). Everything else that matters is locked down too: `object-src 'none'`, `base-uri 'self'`, `form-action 'self'`, `frame-ancestors 'self'`, and `upgrade-insecure-requests` on HTTPS.
+  - **Nonce delivery:** `src/proxy.ts` creates the nonce and adds it to the *request* headers before next-intl runs. next-intl forwards request headers, so Next.js stamps the nonce on its own scripts and the layout reads `x-nonce` for the inline preloader script.
+  - **Styles:** allow `'unsafe-inline'` (React style attributes, animation libraries); this cannot run scripts.
+  - **Payload admin (`/admin`):** outside the proxy, so no CSP. It keeps the general headers; Payload's admin needs its own policy work, which is not worth the risk now.
+  - **Verified:** no violations on any page, including the preloader, GSAP/Matter chunks and the order flow (e2e-tested).
+- **Other headers:**
+  - `Strict-Transport-Security` (1 year, includeSubDomains) only when the site URL is https. **No `preload`:** that is a commitment for the owner to make with the domain.
+  - `Cross-Origin-Opener-Policy: same-origin`, plus the existing nosniff, Referrer-Policy, X-Frame-Options and Permissions-Policy.
+- **Route transitions:** a lid wipe between pages, built as a plain overlay animated with the Web Animations API (no library), started by a capture-phase click listener. It never blocks or delays navigation: the lid closes (260 ms) while the next page loads and opens (320 ms) when the new route renders, and opens on its own after 1.2 s if a navigation is slow or cancelled. It skips external, new-tab, download, same-page and admin links. Motion flag `transitions`.
+- **Accessibility audit:**
+  - **axe:** WCAG 2.2 AA tags, zero serious or critical issues on all 13 pages × 2 languages, plus home with reduced motion.
+  - **Keyboard pass (e2e):** skip link first; visible focus on every stop; mobile menu, cart drawer and lightbox all keyboard-operable with focus return; FAQ accordions; Tab on the preloader skips it instead of focusing hidden links.
+  - **Fixed:** kit cards hid the focus outline of their full-card link. The link keeps its outline and the whole card gets an orange ring.
+- **Contrast:** the palette rule is unit-tested (navy on every light colour and every accent on navy ≥ 4.5:1) and axe checks rendered contrast on every page.
+- **Analytics:** proposal in `docs/ANALYTICS.md` (Cloudflare Web Analytics recommended: free, cookieless, includes real-user speed; Umami / Plausible alternatives). The code is pre-wired and **off** until `NEXT_PUBLIC_ANALYTICS_PROVIDER` and `NEXT_PUBLIC_ANALYTICS_ID` are set; the CSP then allows that provider automatically.
+- **Copy review:** no safety, certification, educational-outcome or superlative claims anywhere. The footer origin line now matches in both languages ("Северна Македонија"). The full list of draft copy and where to edit it is in OWNER_TODO.
+- **Audit:** `pnpm audit --prod` unchanged: only the accepted `esbuild` exception inside drizzle-kit (see M2).
+- **Review screenshots** (`docs/screenshots/m5/`) are static full-page captures with reduced motion; the motion is reviewed through the M4 recordings.

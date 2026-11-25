@@ -50,7 +50,25 @@ Things only you (the owner) can do or decide. Nothing here blocks development; t
 
 ## Content to review
 
-- [ ] All **draft copy** (Macedonian and English): hero subline, intro paragraph, How-it-works steps, FAQ answers, page texts. The six seeded FAQs only state the agreed model (order request, Viber confirmation, cash on delivery, ages 6–12); edit freely.
+All copy below is a **draft** written for you to approve or rewrite. It makes no claims about safety, certification or what children learn. Edit in the admin where marked; the rest lives in `src/i18n/messages/mk.json` / `en.json` (ask us, or edit the text between quotes).
+
+| Copy | Where | What to check |
+|---|---|---|
+| Slogan ГРАДИ. ОТКРИВАЈ. СОЗДАВАЈ. / BUILD. DISCOVER. CREATE. | Admin → Home page → Hero | from your brand: confirm the English |
+| Hero subline "Wooden build-it-yourself kits for curious minds aged 6 to 12" | Admin → Home page → Hero | age range |
+| Intro "a small engineering adventure: wooden parts, clear instructions…" | Admin → Home page → Hero & intro | tone |
+| How it works, 4 steps (pick, send order, we confirm on Viber, pay on delivery) | Admin → Home page → How it works | **delivery and payment wording** once the courier and rules are set |
+| 6 FAQ answers | Admin → FAQs | they only state the agreed model: order request, Viber confirmation, cash on delivery, ages 6–12, small batches |
+| About page | Admin → Pages → About | add your story (placeholder in brackets) |
+| Shipping, Returns, Privacy, Terms | Admin → Pages | **DRAFT: needs owner/legal review**, marked on each page |
+| Kit texts, contents, materials, build times | Admin → Kits | all three kits are samples marked ПРИМЕР / SAMPLE |
+| Default safety line "Recommended for ages X–Y. Adult supervision recommended." | messages: `kits.safetyDefault` | **confirm**; shown when a kit has no safety notes of its own |
+| Footer "Направено во Северна Македонија / Made in North Macedonia" | messages: `common.madeIn` | **confirm** this origin claim (kits made with a local woodworker) |
+| Order success "what happens next" | Admin → Site settings → Orders | your words, placeholder in brackets |
+| Orders paused message, delivery note | Admin → Site settings → Orders | wording |
+| Customer confirmation email | `src/lib/email.ts` | wording (uses the success note above when set) |
+| Preloader line "You've landed on a building site. Follow the instructions." | messages: `preloader.line` | tone |
+| Error / 404 texts ("The marble rolled off the track") | messages: `notFound`, `error` | tone |
 - [ ] **Testimonials:** only real words from real customers, with permission. The section stays hidden until at least one real, published testimonial exists.
 - [ ] **Customer builds:** only with parent consent; prefer hands and the build, no children's faces or full names.
 
@@ -65,4 +83,4 @@ Things only you (the owner) can do or decide. Nothing here blocks development; t
 ## Later decisions
 
 - [ ] Hosting, monthly budget and **domain** (M6, you approve before anything is deployed).
-- [ ] Analytics: none by default; a cookieless option will be proposed in M5.
+- [ ] **Analytics:** choose one of the cookieless options in [`docs/ANALYTICS.md`](docs/ANALYTICS.md). We recommend Cloudflare Web Analytics, which is free and also reports real-phone speed. Nothing is installed until you decide; switching it on only takes two environment variables.

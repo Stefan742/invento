@@ -5,7 +5,7 @@ Bilingual (Macedonian default, English) website and order-request shop for **INV
 - **Stack:** Next.js 16 (App Router) + Payload CMS 3 (admin at `/admin`) + PostgreSQL, TypeScript strict, Tailwind CSS 4, next-intl 4.
 - **Full spec:** [`docs/brief/`](docs/brief/START-HERE.md). Working rules: [`CLAUDE.md`](CLAUDE.md).
 - **Living logs:** [`DECISIONS.md`](DECISIONS.md), [`OWNER_TODO.md`](OWNER_TODO.md), [`ASSETS_NEEDED.md`](ASSETS_NEEDED.md).
-- **Status:** M0–M3 done. The site is launchable: CMS, bilingual site, cart and order requests. Next: M4 signature motion. See [Milestones](#milestones).
+- **Status:** M0–M5 done: launchable site with orders, signature motion, accessibility, performance and security pass. Next: M6 hosting proposal (needs owner approval before anything is deployed). See [Milestones](#milestones).
 
 ## Requirements
 
@@ -38,6 +38,8 @@ Admin: <http://localhost:3000/admin>, sign in with `ADMIN_EMAIL` / `ADMIN_PASSWO
 | `RESEND_API_KEY`, `EMAIL_FROM_ADDRESS`, `EMAIL_FROM_NAME` | Email sending via Resend. Without a key, emails are printed to the server console |
 | `ORDER_RATE_LIMIT` | Order requests per IP per 10 minutes (default 5) |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY` | Optional Cloudflare Turnstile on the order form |
+| `NEXT_PUBLIC_ANALYTICS_PROVIDER`, `NEXT_PUBLIC_ANALYTICS_ID`, `NEXT_PUBLIC_ANALYTICS_SRC` | Optional cookieless analytics, off by default (see [docs/ANALYTICS.md](docs/ANALYTICS.md)) |
+| `NEXT_PUBLIC_MOTION_OFF` | Switch motion features off (`all` or a comma list) |
 | `S3_*` | Production media storage (M6) |
 
 ## Scripts
@@ -84,6 +86,12 @@ The home page "box" experience (preloader, lid-opening hero, marble track, secti
 - The preloader shows once per browser session on the home page; `?skip` skips it.
 - Review recordings: `docs/screenshots/m4/` (`pnpm build && pnpm start -p 3100`, then `E2E_BASE_URL=http://localhost:3100 MILESTONE=m4 pnpm screenshots --grep @motion`).
 
+## Security and quality
+
+- Strict per-request Content-Security-Policy with nonces (`src/proxy.ts`, `src/lib/csp.ts`), HSTS on HTTPS, standard hardening headers (`next.config.ts`).
+- Accessibility: axe (WCAG 2.2 AA) on every page in both languages plus keyboard tests (`tests/e2e/a11y.spec.ts`).
+- Performance and design decisions with measurements: [`DECISIONS.md`](DECISIONS.md).
+
 ## Project layout
 
 ```
@@ -110,8 +118,8 @@ docs/screenshots/            review screenshots per milestone
 | M1 | CMS and data | ✅ |
 | M2 | Static site | ✅ (Gate 1 approved) |
 | M3 | Orders (cart, order route, stock, emails) | ✅ launchable |
-| M4 | Signature motion (Gate 2) | ✅ (Gate 2: owner review) |
-| M5 | Polish and hardening | |
-| M6 | Deploy and handover (Gate 3 before deploying) | |
+| M4 | Signature motion (Gate 2) | ✅ (Gate 2 approved) |
+| M5 | Polish and hardening | ✅ |
+| M6 | Deploy and handover (Gate 3 before deploying) | next: hosting proposal |
 
 Deployment, backups and the owner guide arrive in M6.
