@@ -18,6 +18,7 @@ export const MOTION_FEATURES = [
   'gallery', // drifting photos parallax
   'physics', // falling parts in the Questions section
   'footer', // lid closes over the footer wordmark
+  'transitions', // lid wipe between pages
 ] as const
 
 export type MotionFeature = (typeof MOTION_FEATURES)[number]
