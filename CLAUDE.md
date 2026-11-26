@@ -3,7 +3,7 @@
 Copy of the working rules. Full spec lives in `docs/brief/`.
 
 ## Project
-Bilingual (mk default, en) site for INVENTO: wooden DIY engineering kits for kids 6-12, North Macedonia. Next.js (App Router) + Payload CMS + PostgreSQL, one codebase. Orders are **requests with cash on delivery**, confirmed by the owner on Viber. No online payments.
+Bilingual (mk default, en) site for INVENTO: wooden DIY engineering kits for kids 6-12, Macedonia. Next.js (App Router) + Payload CMS + PostgreSQL, one codebase. Orders are **requests with cash on delivery**, confirmed by the owner on Viber. No online payments.
 
 ## Rules
 - Verify packages/APIs against current official docs before using them; do not rely on memory. Pin versions.

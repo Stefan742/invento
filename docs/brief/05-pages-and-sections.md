@@ -34,7 +34,7 @@ The contact form (name, contact, message) creates a `ContactMessage` or emails t
 6. **Parents say** (navy): a horizontal **ruler / measuring tape** with tick marks; each testimonial is a labeled tick with the first name; the active one enlarges; its quote appears in giant yellow display type. Arrows, swipe and keyboard. **Hide the section entirely if there are no published, non-placeholder testimonials.**
 7. **Questions** (orange): giant "ИМАТЕ ПРАШАЊА? / QUESTIONS?" with the physics objects; a paper card with the top 5 FAQs and buttons "Пишете ни на Viber / Message us on Viber" and Instagram.
 8. **Builds gallery** (paper): "Најдете нè тука / Find us here" and a giant `@handle` (from settings). 6-9 taped photos drift with parallax at different speeds in a **deterministic** layout. Click opens an accessible lightbox. If no published builds exist, hide the section or show illustrated "Your build here" frames (pick the cleaner option, log it).
-9. **Footer** (navy): giant INVENTO wordmark; the **lid closes** over it as the bottom is reached (fallback: simple slide). Columns: navigation, policy links, contact (Viber, Instagram, email), language switch. Orange hairline. "Направено во Македонија / Made in North Macedonia".
+9. **Footer** (navy): giant INVENTO wordmark; the **lid closes** over it as the bottom is reached (fallback: simple slide). Columns: navigation, policy links, contact (Viber, Instagram, email), language switch. Orange hairline. "Направено во Македонија / Made in Macedonia".
 
 Section toggles from `HomePage` global must be respected.
 

@@ -10,7 +10,7 @@ Prices change. They are quoted excluding VAT, and anything marked *estimate* dep
 - PostgreSQL. The data is tiny (well under 1 GB): kits, orders, pages.
 - Object storage for photos uploaded in the admin.
 - Email: one owner notification per order or contact message, plus an optional customer confirmation.
-- A domain with HTTPS, a server close to North Macedonia, backups, and the lowest possible upkeep for a non-technical owner.
+- A domain with HTTPS, a server close to Macedonia, backups, and the lowest possible upkeep for a non-technical owner.
 
 Some parts are the same whichever option is chosen:
 

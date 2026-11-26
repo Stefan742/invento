@@ -361,7 +361,7 @@ const PAGES = {
       title: 'Достава',
       body: [
         { bold: DRAFT_MK },
-        { p: 'Доставуваме само во Северна Македонија. По секоја нарачка ви пишуваме на Viber за да ја потврдиме нарачката, цената на доставата и времето на испорака.' },
+        { p: 'Доставуваме само во Македонија. По секоја нарачка ви пишуваме на Viber за да ја потврдиме нарачката, цената на доставата и времето на испорака.' },
         { p: 'Плаќањето е во готово при достава. [Сопственикот: додадете курир, цена и рокови кога ќе се одлучат.]' },
       ],
     },
@@ -369,7 +369,7 @@ const PAGES = {
       title: 'Shipping',
       body: [
         { bold: DRAFT_EN },
-        { p: 'We deliver within North Macedonia only. After every order we message you on Viber to confirm the order, the delivery cost and the delivery time.' },
+        { p: 'We deliver within Macedonia only. After every order we message you on Viber to confirm the order, the delivery cost and the delivery time.' },
         { p: 'Payment is cash on delivery. [Owner: add courier, cost and timing once decided.]' },
       ],
     },

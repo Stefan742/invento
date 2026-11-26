@@ -39,7 +39,7 @@ export default function OgImage() {
           <span style={{ color: '#FF7A00' }}>DISCOVER.</span>
           <span style={{ color: '#FFD166' }}>CREATE.</span>
         </div>
-        <div style={{ fontSize: 30 }}>Wooden build-it-yourself kits for ages 6-12 · North Macedonia</div>
+        <div style={{ fontSize: 30 }}>Wooden build-it-yourself kits for ages 6-12 · Macedonia</div>
       </div>
     ),
     size,

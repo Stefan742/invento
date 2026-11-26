@@ -65,4 +65,4 @@ Sequential, human-friendly `INV-0001` generated atomically (database sequence or
 
 ## Future (do not build, keep hooks)
 
-Online payment providers (to be researched for North Macedonia separately), discount codes, order tracking by reference, courier integration, customer accounts.
+Online payment providers (to be researched for Macedonia separately), discount codes, order tracking by reference, courier integration, customer accounts.

@@ -69,7 +69,7 @@ Build in this order, each behind `matchMedia` branches (desktop / touch / reduce
 ---
 
 ## Backlog (not now; keep the model extensible)
-1. Online payments (research North Macedonian options separately; do not assume international providers support the business).
+1. Online payments (research Macedonian options separately; do not assume international providers support the business).
 2. Customer accounts, order tracking.
 3. Public build uploads with moderation; likes/comments.
 4. Monthly competitions: challenges, submissions, grading (4 categories × 0-25), jury winner + community favorite, anti-fraud voting, leaderboard, archive.

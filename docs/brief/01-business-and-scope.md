@@ -5,7 +5,7 @@
 **INVENTO** sells physical DIY engineering and creative building kits ("boxes"). A customer buys a box containing parts, materials and instructions and builds an interesting project themselves.
 
 - **Slogan:** ГРАДИ. ОТКРИВАЈ. СОЗДАВАЈ. / BUILD. DISCOVER. CREATE.
-- **Market:** North Macedonia only at launch. Keep the architecture international-ready (locales, currency field), but do not build for it.
+- **Market:** Macedonia only at launch. Keep the architecture international-ready (locales, currency field), but do not build for it.
 - **Buyers:** mainly **parents**, gift-givers; the **users** are children aged **6-12**.
 - **Product:** wood-first kits, produced with a local woodworker using CNC. Launch range is undecided (likely 1-3 kits). Electronics are a possible later line. Example ideas: mini catapult, hydraulic arm, mechanical puzzles, gear mechanisms.
 - **Operations:** two people, no own machines, dependent on a supplier. Batches are small. **Capacity is the biggest business risk**, so the site must support limited batches, honest lead times, and an easy way to pause orders.

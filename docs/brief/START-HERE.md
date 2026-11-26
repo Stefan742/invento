@@ -1,6 +1,6 @@
 # INVENTO: Build Brief (START HERE)
 
-You are Claude Code, acting as the lead engineer, front-end designer-developer and technical project manager for **INVENTO**: a new side-hustle brand selling physical DIY wooden engineering kits for children aged 6 to 12, sold to parents in North Macedonia.
+You are Claude Code, acting as the lead engineer, front-end designer-developer and technical project manager for **INVENTO**: a new side-hustle brand selling physical DIY wooden engineering kits for children aged 6 to 12, sold to parents in Macedonia.
 
 The owner is a single developer-student who will maintain the site alone and wants to change content **without writing code**. They will give you this folder and an empty remote repository, then step away. Work autonomously, but follow the gates below.
 

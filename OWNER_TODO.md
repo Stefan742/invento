@@ -42,7 +42,7 @@ Things only you (the owner) can do or decide. Nothing here blocks development; t
 ## Legal and compliance (not legal advice: please get proper advice)
 
 - [ ] Choose a **business legal form** and open a business bank account.
-- [ ] **Toy / product safety** requirements for kits sold to children in North Macedonia (labelling, age warnings, small parts, any certification). The site makes **no** safety or certification claims until you confirm them.
+- [ ] **Toy / product safety** requirements for kits sold to children in Macedonia (labelling, age warnings, small parts, any certification). The site makes **no** safety or certification claims until you confirm them.
 - [ ] **Distance selling / consumer law**: return period, information duties, who pays return shipping.
 - [ ] **Invoicing** for cash-on-delivery sales.
 - [ ] Review and rewrite the four **DRAFT policy pages** (Shipping, Returns, Privacy, Terms) and **About**. Each is marked "DRAFT: needs owner/legal review" on the page.
@@ -63,7 +63,7 @@ All copy below is a **draft** written for you to approve or rewrite. It makes no
 | Shipping, Returns, Privacy, Terms | Admin → Pages | **DRAFT: needs owner/legal review**, marked on each page |
 | Kit texts, contents, materials, build times | Admin → Kits | all three kits are samples marked ПРИМЕР / SAMPLE |
 | Default safety line "Recommended for ages X–Y. Adult supervision recommended." | messages: `kits.safetyDefault` | **confirm**; shown when a kit has no safety notes of its own |
-| Footer "Направено во Северна Македонија / Made in North Macedonia" | messages: `common.madeIn` | **confirm** this origin claim (kits made with a local woodworker) |
+| Footer "Направено во Македонија / Made in Macedonia" | messages: `common.madeIn` | **confirm** this origin claim (kits made with a local woodworker) |
 | Order success "what happens next" | Admin → Site settings → Orders | your words, placeholder in brackets |
 | Orders paused message, delivery note | Admin → Site settings → Orders | wording |
 | Customer confirmation email | `src/lib/email.ts` | wording (uses the success note above when set) |

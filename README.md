@@ -1,6 +1,6 @@
 # INVENTO web
 
-Bilingual (Macedonian default, English) website and order-request shop for **INVENTO**, wooden DIY engineering kits for children aged 6–12, sold in North Macedonia. There is no online payment: customers send an order request, the owner confirms on Viber, and the customer pays cash on delivery.
+Bilingual (Macedonian default, English) website and order-request shop for **INVENTO**, wooden DIY engineering kits for children aged 6–12, sold in Macedonia. There is no online payment: customers send an order request, the owner confirms on Viber, and the customer pays cash on delivery.
 
 - **Stack:** Next.js 16 (App Router) + Payload CMS 3 (admin at `/admin`) + PostgreSQL, TypeScript strict, Tailwind CSS 4, next-intl 4.
 - **Full spec:** [`docs/brief/`](docs/brief/START-HERE.md). Working rules: [`CLAUDE.md`](CLAUDE.md).
