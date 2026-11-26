@@ -7,6 +7,7 @@ export const INK = 'var(--ink, #0D1B2A)'
 const C = {
   navy: '#0D1B2A',
   navy2: '#1E3550',
+  navy3: '#2E5079',
   orange: '#FF7A00',
   orangeDeep: '#E06400',
   yellow: '#FFD166',
@@ -173,36 +174,111 @@ export function Catapult(props: P) {
   )
 }
 
+/* ---- The INVENTO box (open cardboard box, three-quarter view) ---------------------------- */
+
+type Pt = readonly [number, number]
+const add = (a: Pt, b: Pt): Pt => [a[0] + b[0], a[1] + b[1]]
+const lerp = (a: Pt, b: Pt, t: number): Pt => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]
+const poly = (...pts: Pt[]) => `M${pts.map((p) => `${+p[0].toFixed(1)} ${+p[1].toFixed(1)}`).join(' L')} Z`
+
 /**
- * The INVENTO box: navy outside, orange inside.
- * Groups carry data-part attributes so M4 motion can animate the lid on its hinge.
+ * Geometry of a symmetric box seen from above at an angle. L / F / R / B are the left, front,
+ * right and back corners of the opening; h is the height of the walls.
+ */
+function isoBox(L: Pt, F: Pt, R: Pt, B: Pt, h: number) {
+  const down = (p: Pt): Pt => add(p, [0, h])
+  const d = F[1] - L[1]
+  // Where the shaded back-left inner wall meets the front edge of the opening.
+  const u = Math.min(0.9, h / (4 * d))
+  return {
+    opening: poly(L, B, R, F),
+    wallShade: poly(L, B, add(B, [0, h / 2]), lerp(L, F, u)),
+    floorShade: poly(L, F, R, lerp(R, B, 0.18), add(F, [0, -h * 0.3]), lerp(L, B, 0.18)),
+    left: poly(L, F, down(F), down(L)),
+    right: poly(F, R, down(R), down(F)),
+    flap: (a: Pt, b: Pt, o: Pt) => poly(a, b, add(b, o), add(a, o)),
+  }
+}
+
+const BOX = { L: [52, 150] as Pt, F: [200, 218] as Pt, R: [348, 150] as Pt, B: [200, 82] as Pt, h: 142 }
+const bx = isoBox(BOX.L, BOX.F, BOX.R, BOX.B, BOX.h)
+const DEEP_SHADE = '#B84A00'
+
+/**
+ * The INVENTO box: navy outside, orange inside, flaps open.
+ * Groups carry data-part attributes so the motion can open / close it: two "lid-open" groups
+ * (back flaps behind the opening, front flaps over the walls) and one "lid-closed" (taped top).
  */
 export function Box({ open = true, ...props }: P & { open?: boolean }) {
+  const { L, F, R, B, h } = BOX
+  const tapeA = lerp(L, B, 0.42)
+  const tapeB = lerp(L, B, 0.58)
+  const tapeC = lerp(F, R, 0.58)
+  const tapeD = lerp(F, R, 0.42)
+  const k = (R[1] - F[1]) / (R[0] - F[0])
+  const emblem = add(lerp(F, R, 0.5), [0, h * 0.64])
   return (
     <svg {...base('0 0 400 380', props)}>
-      {/* lid, open: stands up behind the opening, orange underside visible */}
-      <g data-part="lid-open" style={{ transformOrigin: '200px 130px', opacity: open ? 1 : 0 }}>
-        <path d="M96 130 L304 130 L328 34 L72 34 Z" fill={C.orange} stroke={INK} strokeWidth={sw} />
-        <path d="M110 120 L290 120 L308 46 L92 46 Z" fill={C.orangeDeep} opacity="0.55" />
-        <path d="M72 34 L328 34 L330 20 L70 20 Z" fill={C.navy2} stroke={INK} strokeWidth={sw} />
+      {/* back flaps, leaning back: their orange inner faces show */}
+      <g data-part="lid-open" style={{ opacity: open ? 1 : 0 }}>
+        <path d={bx.flap(L, B, [-30, -58])} fill={C.orange} stroke={INK} strokeWidth={sw} />
+        <path d={bx.flap(B, R, [30, -58])} fill={C.orangeDeep} stroke={INK} strokeWidth={sw} />
       </g>
-      {/* inside of the box */}
+      {/* inside: orange, with shade on the back-left wall and near the front walls so it reads hollow */}
       <g data-part="inside">
-        <path d="M58 186 L342 186 L304 130 L96 130 Z" fill={C.orange} stroke={INK} strokeWidth={sw} />
-        <path d="M96 130 L304 130 L292 150 L108 150 Z" fill={C.orangeDeep} opacity="0.6" />
+        <path d={bx.opening} fill={C.orange} />
+        <path d={bx.wallShade} fill={C.orangeDeep} />
+        <path d={bx.floorShade} fill={DEEP_SHADE} />
+        <path d={bx.opening} stroke={INK} strokeWidth={sw} />
       </g>
-      {/* base: front face */}
+      {/* walls, with a gear stamped on the right one */}
       <g data-part="base">
-        <rect x="58" y="186" width="284" height="170" rx="10" fill={C.navy2} stroke={INK} strokeWidth={sw} />
-        <path d="M58 214 H342" stroke={C.orange} strokeWidth="4" opacity="0.9" />
-        <path d={gearPath(200, 284, 40, 31, 9)} fill="none" stroke={C.orange} strokeWidth="5" />
-        <circle cx="200" cy="284" r="11" fill="none" stroke={C.orange} strokeWidth="5" />
+        <path d={bx.left} fill={C.navy2} stroke={INK} strokeWidth={sw} />
+        <path d={bx.right} fill={C.navy} stroke={INK} strokeWidth={sw} />
+        <g transform={`matrix(1 ${k.toFixed(3)} 0 1 ${emblem[0]} ${emblem[1].toFixed(1)})`}>
+          <path d={gearPath(0, 0, 30, 23, 9)} stroke={C.orange} strokeWidth="5" />
+          <circle r="9" stroke={C.orange} strokeWidth="5" />
+        </g>
       </g>
-      {/* lid, closed: sits on top of the opening */}
+      {/* front flaps, folded out over the walls: their navy outer faces show */}
+      <g data-part="lid-open" data-hinge-top style={{ opacity: open ? 1 : 0 }}>
+        <path d={bx.flap(L, F, [-44, 40])} fill={C.navy3} stroke={INK} strokeWidth={sw} />
+        <path d={bx.flap(F, R, [44, 40])} fill={C.navy2} stroke={INK} strokeWidth={sw} />
+      </g>
+      {/* closed: flaps shut and taped */}
       <g data-part="lid-closed" style={{ opacity: open ? 0 : 1 }}>
-        <path d="M50 192 L350 192 L310 124 L90 124 Z" fill={C.navy2} stroke={INK} strokeWidth={sw} />
-        <path d="M50 192 L350 192 L350 206 L50 206 Z" fill={C.navy} stroke={INK} strokeWidth={sw} />
+        <path d={bx.opening} fill={C.navy3} stroke={INK} strokeWidth={sw} />
+        <path d={poly(tapeA, tapeB, tapeC, tapeD)} fill={C.orange} />
+        <path d={poly(tapeD, tapeC, add(tapeC, [0, h * 0.22]), add(tapeD, [0, h * 0.22]))} fill={C.orange} />
+        <path d={`M${lerp(L, B, 0.5).join(' ')} L${lerp(F, R, 0.5).join(' ')}`} stroke={INK} strokeWidth="4" />
+        <path d={bx.opening} stroke={INK} strokeWidth={sw} />
       </g>
+    </svg>
+  )
+}
+
+const MARK = { L: [14, 64] as Pt, F: [60, 85] as Pt, R: [106, 64] as Pt, B: [60, 43] as Pt, h: 32 }
+const mk = isoBox(MARK.L, MARK.F, MARK.R, MARK.B, MARK.h)
+
+/**
+ * Logo mark: the INVENTO box with a yellow gear rising out of it and a little spark.
+ * Drawn chunky so it still reads at 32-40px (header, favicon).
+ */
+export function LogoMark(props: P) {
+  const { L, R, B } = MARK
+  const s = 5.5
+  return (
+    <svg {...base('0 0 120 120', props)}>
+      <path d={mk.flap(L, B, [-12, -16])} fill={C.orange} stroke={INK} strokeWidth={s} />
+      <path d={mk.flap(B, R, [12, -16])} fill={C.orangeDeep} stroke={INK} strokeWidth={s} />
+      <path d={mk.opening} fill={C.orange} />
+      <path d={mk.floorShade} fill={DEEP_SHADE} />
+      <path d={mk.opening} stroke={INK} strokeWidth={s} />
+      <path d={gearPath(60, 36, 27, 20, 8)} fill={C.yellow} stroke={INK} strokeWidth="5" />
+      <circle cx="60" cy="36" r="8" fill={C.paper} stroke={INK} strokeWidth="5" />
+      <path d={mk.left} fill={C.navy2} stroke={INK} strokeWidth={s} />
+      <path d={mk.right} fill={C.navy} stroke={INK} strokeWidth={s} />
+      <path d="M100 8 L100 22 M93 15 L107 15" stroke={C.orange} strokeWidth="5" />
     </svg>
   )
 }

@@ -25,8 +25,8 @@ export function Logo({ className = '' }: { className?: string }) {
   return (
     <span className={`group/logo flex items-center gap-2 ${className}`}>
       <Illustration
-        name="box"
-        className="h-10 w-10 -rotate-6 transition-transform duration-300 ease-[var(--ease-back)] group-hover/logo:-translate-y-0.5 group-hover/logo:rotate-6"
+        name="logo"
+        className="h-11 w-11 -rotate-3 transition-transform duration-300 ease-[var(--ease-back)] group-hover/logo:-translate-y-0.5 group-hover/logo:rotate-6"
       />
       <span className="display text-3xl tracking-wide">INVENTO</span>
     </span>

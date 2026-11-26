@@ -8,7 +8,8 @@
 
 | Name | Used for | Replace with | Notes |
 |---|---|---|---|
-| `box` / `box-closed` | Logo mark, hero, empty states, sold-out block | `public/art/box.svg` (+ `box-closed.svg`) | **Most important.** Navy outside, orange inside. The preloader and hero animate the lid on its hinge, so the replacement SVG must be **inline-able** (not an `<img>`) and keep separate groups: `data-part="lid-open"` (lid standing up, hinge at its bottom edge), `"lid-closed"` (lid on the box, hinge at its top edge), `"base"` and `"inside"`. Send the artwork and we will wire it in. |
+| `box` / `box-closed` | Hero, preloader, kit cards, empty states, sold-out block | `public/art/box.svg` (+ `box-closed.svg`) | **Redrawn 2026-11-26** as a finished open cardboard box (three-quarter view, four flaps, taped when closed); standalone files in `docs/brand/`. Still replaceable. The preloader and hero animate the flaps, so a replacement must be **inline-able** (not an `<img>`) and keep the groups `data-part="lid-open"` (back flaps, hinge at their bottom edge; front flaps get `data-hinge-top`), `"lid-closed"`, `"base"` and `"inside"`. |
+| `logo` | Header logo mark, favicon | `public/art/logo.svg` | **Drawn 2026-11-26:** the box with a yellow gear rising out of it, chunky enough for 32-40px. Files in `docs/brand/`. |
 | `gear`, `gear-orange`, `gear-teal` | Difficulty rating, section decorations | `public/art/gear.svg` | |
 | `rocket` | Hero parts, How-it-works step 4 | `public/art/rocket.svg` | |
 | `bulb` | Hero parts, How-it-works step 3, FAQ header | `public/art/bulb.svg` | |
@@ -21,9 +22,9 @@
 
 | Asset | Currently | Replace with |
 |---|---|---|
-| Logo (header) | placeholder box icon + "INVENTO" set in the display font | `public/art/logo.svg` (light version for navy backgrounds) |
+| Logo (header) | `logo` mark (box + rising gear) + "INVENTO" set in the display font | only if the owner has an official logo: `public/art/logo.svg` |
 | Footer wordmark | "INVENTO" set in the display font | can stay as text, or use the real wordmark |
-| Favicon / app icon | none yet | square logo mark, SVG or 512×512 PNG |
+| Favicon / app icon | `src/app/icon.svg`, the `logo` mark (regenerate with `pnpm export:brand`) | only if the owner has an official icon |
 | Default share image (OG) | generated navy card with Latin text (`src/app/(frontend)/[locale]/opengraph-image.tsx`) | upload a 1200×630 image in Admin → Site settings → SEO defaults |
 
 ## Photos (upload in the admin, no code needed)

@@ -1,9 +1,10 @@
 import type { CSSProperties, ReactElement, SVGProps } from 'react'
 
 import { ART_OVERRIDES } from './overrides'
-import { Bolt, Box, Bulb, Catapult, Gear, Marble, Nut, Peg, Rocket, Spring, Wrench } from './shapes'
+import { Bolt, Box, Bulb, Catapult, Gear, LogoMark, Marble, Nut, Peg, Rocket, Spring, Wrench } from './shapes'
 
 export const ILLUSTRATIONS = {
+  logo: LogoMark,
   box: Box,
   'box-closed': (p: SVGProps<SVGSVGElement>) => <Box open={false} {...p} />,
   gear: Gear,

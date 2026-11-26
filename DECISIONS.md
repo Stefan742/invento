@@ -164,3 +164,11 @@ Short log of non-obvious choices and why. Newest at the bottom of each milestone
 - **Header has two states:** at the top of every page it is a full-width navy bar (matching the navy hero), and after 24px of scroll it turns into the floating paper pill. It always stays on screen; hiding on scroll down is removed, as the owner asked for a sticky header.
   - **How:** MotionRoot sets `data-scrolled` on the header. The navy bar and the pill are separate layers that crossfade with opacity and transform only, and the controls take their colours from `--ink` / `--ink-contrast`. This is a style state, not a motion feature, so the `header` motion flag is gone. Without JS the header stays the navy bar.
 - **Order sticker:** uses the same `btn-pop` hover as Add to cart (lift, yellow, hard shadow, the cart icon hops), on top of its own tilt. The marble's "pop" tween clears its inline transform afterwards so the hover keeps working.
+
+### Box and logo redrawn (2026-11-26)
+
+- **Owner asked for a better, less generic box logo.** Illustrator is installed, but it can only be driven by clicking on screen, so the art is drawn directly as SVG code in `shapes.tsx` (same as all other illustrations). It stays inline, themeable via `--ink` and animatable.
+- **Box:** a three-quarter view open cardboard box. Navy walls with an orange gear stamped on the side; the orange inside is shaded so it reads hollow. Two back flaps lean back (orange inner faces), two front flaps fold out (navy outer faces). When closed it has a taped top. Geometry comes from a small `isoBox()` helper, so corners stay consistent.
+- **Motion:** "lid-open" is now two groups (back and front flaps), so the hero and preloader use `querySelectorAll`. `flapHinge` folds back flaps on their bottom edge and front flaps (`data-hinge-top`) on their top edge.
+- **Logo mark** (`logo`): the same box with a yellow gear rising out of it and an orange spark, used in the header and as the favicon (`src/app/icon.svg`).
+- **Standalone files:** `pnpm export:brand` renders the components to `docs/brand/*.svg` (light and on-navy versions) and the favicon, so the owner can use them for print and social media.
