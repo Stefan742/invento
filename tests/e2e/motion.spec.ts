@@ -32,6 +32,19 @@ test.describe('preloader', () => {
     await expect(page.locator('[data-preloader]')).toBeHidden({ timeout: 3000 })
   })
 
+  test('a reload of the home page starts at the top and shows it again', async ({ page }) => {
+    await page.goto('/mk')
+    await expect(page.locator('[data-preloader]')).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(page.locator('[data-preloader]')).toBeHidden({ timeout: 3000 })
+    await page.evaluate(() => window.scrollTo(0, 2500))
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(1000)
+    await page.reload()
+    await expect(page.locator('[data-preloader]')).toBeVisible()
+    await page.waitForLoadState('load')
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0)
+  })
+
   test('?intro shows it again in the same session', async ({ page }) => {
     await page.goto('/mk?skip')
     await page.evaluate(() => sessionStorage.setItem('invento-intro-seen', '1'))
