@@ -138,3 +138,13 @@ Short log of non-obvious choices and why. Newest at the bottom of each milestone
 - **Copy review:** no safety, certification, educational-outcome or superlative claims anywhere. The footer origin line now matches in both languages ("Северна Македонија"). The full list of draft copy and where to edit it is in OWNER_TODO.
 - **Audit:** `pnpm audit --prod` unchanged: only the accepted `esbuild` exception inside drizzle-kit (see M2).
 - **Review screenshots** (`docs/screenshots/m5/`) are static full-page captures with reduced motion; the motion is reviewed through the M4 recordings.
+
+## M6: Deploy and handover
+
+- **Hosting comparison:** `docs/HOSTING.md` (researched 2026-11-26 from official pricing and terms). Recommended: Railway Hobby (EU West, Amsterdam) + Cloudflare R2 + Resend Free + `.mk` domain, about $10/month. Waiting for owner approval (Gate 3).
+  - **Vercel Hobby excluded:** its terms limit it to personal or non-commercial use.
+  - **Hetzner excluded for now:** it has restricted new cloud servers since June 2026.
+- **Media storage:** `@payloadcms/storage-s3` (pinned 3.94.2, same as Payload), switched on only when `S3_BUCKET` is set, so dev keeps local disk.
+  - **Served through Payload:** files are still served through `/api/media/file/*` instead of public bucket URLs. That keeps the Builds consent and draft access rules, leaves `next/image` patterns and the CSP unchanged, and keeps the bucket private.
+  - **Schema:** `alwaysInsertFields: true` keeps the DB schema identical with and without the plugin. Migration `storage_s3` adds `media.prefix` and `media._objectkey`.
+  - **Not yet tested against a real bucket:** the MinIO images are no longer public, so the first real upload is tested against R2 during deployment.

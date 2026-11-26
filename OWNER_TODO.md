@@ -82,5 +82,5 @@ All copy below is a **draft** written for you to approve or rewrite. It makes no
 
 ## Later decisions
 
-- [ ] Hosting, monthly budget and **domain** (M6, you approve before anything is deployed).
+- [ ] **Hosting, monthly cost and domain** (Gate 3): read [`docs/HOSTING.md`](docs/HOSTING.md) and approve an option. Recommended: Railway, about $10/month, plus a `.mk` domain at about 900 MKD/year. Then create the accounts in your own name (host, Cloudflare, Resend) and register the domain. Nothing is deployed before you approve.
 - [ ] **Analytics:** choose one of the cookieless options in [`docs/ANALYTICS.md`](docs/ANALYTICS.md). We recommend Cloudflare Web Analytics, which is free and also reports real-phone speed. Nothing is installed until you decide; switching it on only takes two environment variables.
