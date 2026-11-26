@@ -15,10 +15,10 @@ const PAPER = '#F2F2F2'
 function svg(Cmp: ComponentType<SVGProps<SVGSVGElement> & { open?: boolean }>, ink: string, extra: Record<string, unknown> = {}) {
   const markup = renderToStaticMarkup(createElement(Cmp, extra))
     .replaceAll('var(--ink, #0D1B2A)', ink)
-    // Groups hidden by the open / closed state are left out of the static file.
-    .replace(/<g data-part="[^"]+"[^>]*style="opacity:0"[^>]*>[\s\S]*?<\/g>/g, '')
+    // Tape that is hidden in this state (open box) is left out of the static file.
+    .replace(/<path data-tape="true" d=""[^>]*><\/path>/g, '')
     .replace(/ data-[a-z-]+(="[^"]*")?/g, '')
-    .replace(/ style="opacity:1"/g, '')
+    .replace(/ visibility="visible"/g, '')
   return `<?xml version="1.0" encoding="UTF-8"?>\n${markup}\n`
 }
 

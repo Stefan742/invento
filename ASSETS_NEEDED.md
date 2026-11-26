@@ -8,7 +8,7 @@
 
 | Name | Used for | Replace with | Notes |
 |---|---|---|---|
-| `box` / `box-closed` | Hero, preloader, kit cards, empty states, sold-out block | `public/art/box.svg` (+ `box-closed.svg`) | **Redrawn 2026-11-26** as a finished open cardboard box (three-quarter view, four flaps, taped when closed); standalone files in `docs/brand/`. Still replaceable. The preloader and hero animate the flaps, so a replacement must be **inline-able** (not an `<img>`) and keep the groups `data-part="lid-open"` (back flaps, hinge at their bottom edge; front flaps get `data-hinge-top`), `"lid-closed"`, `"base"` and `"inside"`. |
+| `box` / `box-closed` | Hero, preloader, kit cards, empty states, sold-out block | `public/art/box.svg` (+ `box-closed.svg`) | **Redrawn 2026-11-26** as a finished open cardboard box (three-quarter view, four flaps, taped when closed); standalone files in `docs/brand/`. Still replaceable, but the preloader and hero turn each of the four flaps on its hinge (geometry in `box-flaps.ts`), so a replacement needs the same corner geometry or new flap code. |
 | `logo` | Header logo mark, favicon | `public/art/logo.svg` | **Drawn 2026-11-26:** the box with a yellow gear rising out of it, chunky enough for 32-40px. Files in `docs/brand/`. |
 | `gear`, `gear-orange`, `gear-teal` | Difficulty rating, section decorations | `public/art/gear.svg` | |
 | `rocket` | Hero parts, How-it-works step 4 | `public/art/rocket.svg` | |

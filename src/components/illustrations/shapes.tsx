@@ -3,6 +3,8 @@
  * Replace with real art by dropping files into /public/art (see ASSETS_NEEDED.md). */
 import type { SVGProps } from 'react'
 
+import { add, BOX, flapShapes, lerp, poly, type Pt } from './box-flaps'
+
 export const INK = 'var(--ink, #0D1B2A)'
 const C = {
   navy: '#0D1B2A',
@@ -176,11 +178,6 @@ export function Catapult(props: P) {
 
 /* ---- The INVENTO box (open cardboard box, three-quarter view) ---------------------------- */
 
-type Pt = readonly [number, number]
-const add = (a: Pt, b: Pt): Pt => [a[0] + b[0], a[1] + b[1]]
-const lerp = (a: Pt, b: Pt, t: number): Pt => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]
-const poly = (...pts: Pt[]) => `M${pts.map((p) => `${+p[0].toFixed(1)} ${+p[1].toFixed(1)}`).join(' L')} Z`
-
 /**
  * Geometry of a symmetric box seen from above at an angle. L / F / R / B are the left, front,
  * right and back corners of the opening; h is the height of the walls.
@@ -200,30 +197,23 @@ function isoBox(L: Pt, F: Pt, R: Pt, B: Pt, h: number) {
   }
 }
 
-const BOX = { L: [52, 150] as Pt, F: [200, 218] as Pt, R: [348, 150] as Pt, B: [200, 82] as Pt, h: 142 }
 const bx = isoBox(BOX.L, BOX.F, BOX.R, BOX.B, BOX.h)
 const DEEP_SHADE = '#B84A00'
 
 /**
- * The INVENTO box: navy outside, orange inside, flaps open.
- * Groups carry data-part attributes so the motion can open / close it: two "lid-open" groups
- * (back flaps behind the opening, front flaps over the walls) and one "lid-closed" (taped top).
+ * The INVENTO box: navy outside, orange inside. Closed, its two outer flaps meet under the tape;
+ * open, all four flaps are swung out (see box-flaps.ts). The flaps live in `data-flaps`, so the
+ * hero and preloader can open / close it with `renderFlaps()`.
  */
-export function Box({ open = true, ...props }: P & { open?: boolean }) {
-  const { L, F, R, B, h } = BOX
-  const tapeA = lerp(L, B, 0.42)
-  const tapeB = lerp(L, B, 0.58)
-  const tapeC = lerp(F, R, 0.58)
-  const tapeD = lerp(F, R, 0.42)
+export function Box({ open = true, progress, ...props }: P & { open?: boolean; /** 0 = closed … 1 = open; overrides `open` */ progress?: number }) {
+  const { F, R, h } = BOX
   const k = (R[1] - F[1]) / (R[0] - F[0])
-  const emblem = add(lerp(F, R, 0.5), [0, h * 0.64])
+  const emblem = add(lerp(F, R, 0.5), [0, h * 0.7])
+  // A strip of the tape stays on the wall below the seam, also once the box is open.
+  const wallTapeA = lerp(F, R, 0.42)
+  const wallTapeB = lerp(F, R, 0.58)
   return (
     <svg {...base('0 0 400 380', props)}>
-      {/* back flaps, leaning back: their orange inner faces show */}
-      <g data-part="lid-open" style={{ opacity: open ? 1 : 0 }}>
-        <path d={bx.flap(L, B, [-30, -58])} fill={C.orange} stroke={INK} strokeWidth={sw} />
-        <path d={bx.flap(B, R, [30, -58])} fill={C.orangeDeep} stroke={INK} strokeWidth={sw} />
-      </g>
       {/* inside: orange, with shade on the back-left wall and near the front walls so it reads hollow */}
       <g data-part="inside">
         <path d={bx.opening} fill={C.orange} />
@@ -235,23 +225,22 @@ export function Box({ open = true, ...props }: P & { open?: boolean }) {
       <g data-part="base">
         <path d={bx.left} fill={C.navy2} stroke={INK} strokeWidth={sw} />
         <path d={bx.right} fill={C.navy} stroke={INK} strokeWidth={sw} />
+        <path d={poly(wallTapeA, wallTapeB, add(wallTapeB, [0, h * 0.22]), add(wallTapeA, [0, h * 0.22]))} fill={C.orange} />
         <g transform={`matrix(1 ${k.toFixed(3)} 0 1 ${emblem[0]} ${emblem[1].toFixed(1)})`}>
           <path d={gearPath(0, 0, 30, 23, 9)} stroke={C.orange} strokeWidth="5" />
           <circle r="9" stroke={C.orange} strokeWidth="5" />
         </g>
       </g>
-      {/* front flaps, folded out over the walls: their navy outer faces show */}
-      <g data-part="lid-open" data-hinge-top style={{ opacity: open ? 1 : 0 }}>
-        <path d={bx.flap(L, F, [-44, 40])} fill={C.navy3} stroke={INK} strokeWidth={sw} />
-        <path d={bx.flap(F, R, [44, 40])} fill={C.navy2} stroke={INK} strokeWidth={sw} />
-      </g>
-      {/* closed: flaps shut and taped */}
-      <g data-part="lid-closed" style={{ opacity: open ? 0 : 1 }}>
-        <path d={bx.opening} fill={C.navy3} stroke={INK} strokeWidth={sw} />
-        <path d={poly(tapeA, tapeB, tapeC, tapeD)} fill={C.orange} />
-        <path d={poly(tapeD, tapeC, add(tapeC, [0, h * 0.22]), add(tapeD, [0, h * 0.22]))} fill={C.orange} />
-        <path d={`M${lerp(L, B, 0.5).join(' ')} L${lerp(F, R, 0.5).join(' ')}`} stroke={INK} strokeWidth="4" />
-        <path d={bx.opening} stroke={INK} strokeWidth={sw} />
+      {/* the four top flaps, each turning on its hinge edge */}
+      <g data-flaps>
+        {flapShapes(progress ?? (open ? 1 : 0)).map((s) => (
+          <g key={s.id} data-flap={s.id}>
+            <path data-face d={s.d} fill={s.fill} stroke={INK} strokeWidth={sw} />
+            {s.id === 'fl' || s.id === 'br' ? (
+              <path data-tape d={s.tape ?? ''} fill={C.orange} visibility={s.tape ? 'visible' : 'hidden'} />
+            ) : null}
+          </g>
+        ))}
       </g>
     </svg>
   )

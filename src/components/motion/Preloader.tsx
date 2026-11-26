@@ -2,9 +2,9 @@
 
 import { useEffect, useRef } from 'react'
 
+import { renderFlaps } from '../illustrations/box-flaps'
 import { Illustration, type IllustrationName } from '../illustrations/Illustration'
 
-import { flapHinge } from './box-hinge'
 import { PRELOADER_DONE_EVENT, PRELOADER_SKIP_EVENT } from './preloader-script'
 
 const PARTS: { name: IllustrationName; x: string; rot: number }[] = [
@@ -59,8 +59,6 @@ export function Preloader({ line, skipLabel }: { line: string; skipLabel: string
       const root = rootRef.current!
       const box = boxRef.current!
       const parts = partRefs.current.filter(Boolean) as HTMLButtonElement[]
-      const lidOpen = box.querySelectorAll('[data-part="lid-open"]')
-      const lidClosed = box.querySelector('[data-part="lid-closed"]')
       root.style.animation = 'none' // JS is in control: cancel the CSS failsafe
 
       const dropped = new Set<number>()
@@ -123,11 +121,9 @@ export function Preloader({ line, skipLabel }: { line: string; skipLabel: string
         parts.forEach((_, i) => drop(i))
         const heroBox = document.querySelector<HTMLElement>('[data-hero-boxart]')
         const tl = gsap.timeline({ delay: 0.7, onComplete: done })
-        // Lid slams shut with a small shake…
-        if (lidOpen.length && lidClosed) {
-          tl.to(lidOpen, { scaleY: 0, transformOrigin: flapHinge, duration: 0.18, ease: 'power4.in' })
-            .fromTo(lidClosed, { opacity: 1, y: -60 }, { y: 0, duration: 0.16, ease: 'power4.in' }, '<0.1')
-        }
+        // The flaps fold shut (the two underneath first, then the two on top), with a small shake…
+        const flaps = { p: 1 }
+        tl.to(flaps, { p: 0, duration: 0.6, ease: 'power2.in', onUpdate: () => renderFlaps(box, flaps.p) })
         tl.to(box, { keyframes: { x: [-10, 9, -6, 4, 0] }, duration: 0.35, ease: 'none' })
         // …then hands off to the hero box (same position and size), and the overlay fades.
         if (heroBox) {

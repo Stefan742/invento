@@ -1,6 +1,7 @@
 import type { gsap as GSAP } from 'gsap'
 
-import { flapHinge } from '../box-hinge'
+import { renderFlaps } from '../../illustrations/box-flaps'
+
 import { stickyPin } from './sticky'
 
 type G = typeof GSAP
@@ -81,19 +82,15 @@ export function heroIntro(gsap: G, hero: HTMLElement) {
 
 /** Put the hero box into its closed state (parts tucked inside). */
 export function closeHeroBox(gsap: G, hero: HTMLElement) {
-  const lidOpen = hero.querySelectorAll('[data-hero-boxart] [data-part="lid-open"]')
-  const lidClosed = hero.querySelector('[data-hero-boxart] [data-part="lid-closed"]')
+  const art = hero.querySelector('[data-hero-boxart]')
   const parts = hero.querySelectorAll('[data-hero-part]')
-  if (lidOpen.length) gsap.set(lidOpen, { scaleY: 0, opacity: 1, transformOrigin: flapHinge })
-  if (lidClosed) gsap.set(lidClosed, { opacity: 1, scaleY: 1, transformOrigin: '50% 0%' })
+  if (art) renderFlaps(art, 0)
   gsap.set(parts, { yPercent: 160, scale: 0.3, opacity: 0 })
 }
 
 export function heroScroll(gsap: G, hero: HTMLElement, { desktop }: { desktop: boolean }) {
   const box = hero.querySelector<HTMLElement>('[data-hero-box]')
   const boxArt = hero.querySelector<HTMLElement>('[data-hero-boxart]')
-  const lidOpen = hero.querySelectorAll('[data-hero-boxart] [data-part="lid-open"]')
-  const lidClosed = hero.querySelector('[data-hero-boxart] [data-part="lid-closed"]')
   const parts = hero.querySelectorAll<HTMLElement>('[data-hero-part]')
   const words = hero.querySelectorAll<HTMLElement>('[data-hero-word]')
   const sub = hero.querySelector<HTMLElement>('[data-hero-sub]')
@@ -120,9 +117,9 @@ export function heroScroll(gsap: G, hero: HTMLElement, { desktop }: { desktop: b
     },
   })
 
-  // 1. lid swings open on its hinge
-  if (lidClosed) tl.to(lidClosed, { scaleY: 0, duration: 0.18 }, 0)
-  if (lidOpen.length) tl.to(lidOpen, { scaleY: 1, duration: 0.2, ease: 'back.out(2)' }, 0.16)
+  // 1. the tape splits: the two top flaps swing out, then the two underneath
+  const flaps = { p: 0 }
+  tl.to(flaps, { p: 1, duration: 0.32, onUpdate: () => renderFlaps(boxArt, flaps.p) }, 0)
   // 2. parts pop out and hover
   tl.to(parts, { yPercent: 0, scale: 1, opacity: 1, duration: 0.25, stagger: 0.05, ease: 'back.out(1.8)' }, 0.3)
   // 3. words split outward, subline fades
@@ -144,5 +141,6 @@ export function heroScroll(gsap: G, hero: HTMLElement, { desktop }: { desktop: b
     tl.scrollTrigger?.kill()
     tl.revert()
     pin.undo()
+    renderFlaps(boxArt, 1) // back to the static (open) drawing
   }
 }
