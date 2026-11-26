@@ -7,7 +7,6 @@
  */
 export const MOTION_FEATURES = [
   'smooth', // Lenis smooth scroll (desktop / fine pointer only)
-  'header', // header hides on scroll down, returns on scroll up
   'cursor', // gear cursor (fine pointer only)
   'preloader', // "Build to enter"
   'hero', // slogan micro-animations + lid opens / dive on scroll

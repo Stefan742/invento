@@ -50,13 +50,15 @@ export function MobileMenu({
         aria-expanded={open}
         aria-controls={id}
         onClick={() => setOpen((o) => !o)}
-        className="border-navy hover:bg-yellow relative z-[60] grid h-11 w-11 place-items-center rounded-full border-[3px] transition-colors"
+        className={`hover:bg-yellow hover:border-navy group/menu relative z-[60] grid h-11 w-11 place-items-center rounded-full border-[3px] transition-colors ${
+          open ? 'border-navy' : 'border-[var(--ink)]'
+        }`}
       >
         <span className="sr-only">{open ? closeLabel : openLabel}</span>
         <span aria-hidden="true" className="flex flex-col gap-1.5">
-          <span className={`bg-navy block h-[3px] w-5 rounded transition-transform ${open ? 'translate-y-[9px] rotate-45' : ''}`} />
-          <span className={`bg-navy block h-[3px] w-5 rounded transition-opacity ${open ? 'opacity-0' : ''}`} />
-          <span className={`bg-navy block h-[3px] w-5 rounded transition-transform ${open ? '-translate-y-[9px] -rotate-45' : ''}`} />
+          <span className={`${open ? 'bg-navy' : 'bg-[var(--ink)]'} group-hover/menu:bg-navy block h-[3px] w-5 rounded transition-transform ${open ? 'translate-y-[9px] rotate-45' : ''}`} />
+          <span className={`${open ? 'bg-navy' : 'bg-[var(--ink)]'} group-hover/menu:bg-navy block h-[3px] w-5 rounded transition-opacity ${open ? 'opacity-0' : ''}`} />
+          <span className={`${open ? 'bg-navy' : 'bg-[var(--ink)]'} group-hover/menu:bg-navy block h-[3px] w-5 rounded transition-transform ${open ? '-translate-y-[9px] -rotate-45' : ''}`} />
         </span>
       </button>
       <div

@@ -10,7 +10,7 @@ import { setLenis } from './lenis-store'
  * Site-wide motion, mounted once in the layout. Everything here is an enhancement:
  * nothing is hidden or moved until this runs, and each part has its own off switch.
  * - Lenis smooth scroll: fine pointer + desktop only (native scroll on touch)
- * - header hides on scroll down and returns on scroll up
+ * - header: navy bar at the top, floating sticker pill once scrolled (style state, always on)
  * - gear cursor: fine pointer only
  */
 export function MotionRoot() {
@@ -48,26 +48,14 @@ export function MotionRoot() {
       })
     }
 
-    // --- Header: hide on scroll down, show on scroll up ----------------------------
+    // --- Header: navy bar at the top, floating pill once the page scrolls ---------------
+    // Not a motion feature: it is a style state (the header always stays on screen).
     const header = document.querySelector<HTMLElement>('[data-site-header]')
-    if (header && motionEnabled('header')) {
-      let lastY = window.scrollY
-      let hidden = false
+    if (header) {
       let ticking = false
       const update = () => {
         ticking = false
-        const y = window.scrollY
-        const goingDown = y > lastY + 4
-        const goingUp = y < lastY - 4
-        const menuOpen = header.querySelector('[role="dialog"]:not([hidden])')
-        if (goingDown && y > 160 && !hidden && !menuOpen) {
-          hidden = true
-          header.style.transform = 'translateY(-100%)'
-        } else if ((goingUp || y < 80) && hidden) {
-          hidden = false
-          header.style.transform = ''
-        }
-        if (goingDown || goingUp) lastY = y
+        header.toggleAttribute('data-scrolled', window.scrollY > 24)
       }
       const onScroll = () => {
         if (!ticking) {
@@ -75,19 +63,11 @@ export function MotionRoot() {
           requestAnimationFrame(update)
         }
       }
-      // Never keep the header hidden while something in it has keyboard focus.
-      const onFocus = () => {
-        hidden = false
-        header.style.transform = ''
-      }
-      header.style.transition = 'transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)'
+      update()
       window.addEventListener('scroll', onScroll, { passive: true })
-      header.addEventListener('focusin', onFocus)
       cleanups.push(() => {
         window.removeEventListener('scroll', onScroll)
-        header.removeEventListener('focusin', onFocus)
-        header.style.transform = ''
-        header.style.transition = ''
+        header.removeAttribute('data-scrolled')
       })
     }
 

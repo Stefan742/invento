@@ -100,15 +100,19 @@ test.describe('motion on (desktop)', () => {
     expect(errors).toEqual([])
   })
 
-  test('header comes back on scroll up and when focused', async ({ page }) => {
+  test('header is a navy bar at the top and a sticky pill once scrolled', async ({ page }) => {
     await page.goto('/mk/faq')
     await expect(page.locator('html')).toHaveClass(/js-motion/)
     await expect(page.locator('html')).toHaveClass(/lenis/) // smooth scroll attached
     const header = page.locator('[data-site-header]')
+    await expect(header).not.toHaveAttribute('data-scrolled')
     await page.mouse.wheel(0, 900)
-    await expect.poll(async () => header.evaluate((el) => el.style.transform)).toContain('-100%')
-    await page.waitForTimeout(1200) // let the smooth scroll settle before reversing
-    await page.mouse.wheel(0, -400)
-    await expect.poll(async () => header.evaluate((el) => el.style.transform)).toBe('')
+    await expect(header).toHaveAttribute('data-scrolled', '')
+    // It stays on screen while scrolling down.
+    await page.waitForTimeout(1200)
+    expect((await header.boundingBox())?.y).toBe(0)
+    await expect(header.getByRole('link', { name: 'INVENTO, home' })).toBeInViewport()
+    await page.mouse.wheel(0, -5000)
+    await expect(header).not.toHaveAttribute('data-scrolled')
   })
 })

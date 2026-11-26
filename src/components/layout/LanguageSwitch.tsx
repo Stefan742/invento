@@ -7,7 +7,8 @@ import { locales } from '@/i18n/routing'
 
 /**
  * MK / EN switch that keeps the visitor on the same page.
- * `pill`: a segmented toggle for the header (navy marks the current language).
+ * `pill`: a segmented toggle for the header (the current language is filled
+ * with the header's ink: paper on the navy bar, navy on the pill).
  */
 export function LanguageSwitch({
   className = '',
@@ -23,7 +24,7 @@ export function LanguageSwitch({
 
   if (variant === 'pill') {
     return (
-      <nav aria-label={label} className={`border-navy items-center rounded-full border-[3px] p-0.5 text-sm font-black ${className}`}>
+      <nav aria-label={label} className={`items-center rounded-full border-[var(--ink)] border-[3px] p-0.5 text-sm font-black ${className}`}>
         {locales.map((l) => (
           <Link
             key={l}
@@ -33,7 +34,7 @@ export function LanguageSwitch({
             lang={l}
             aria-current={l === current ? 'true' : undefined}
             className={`grid h-9 min-w-10 place-items-center rounded-full px-2 uppercase transition-colors ${
-              l === current ? 'bg-navy text-paper' : 'hover:bg-yellow'
+              l === current ? 'bg-[var(--ink)] text-[var(--ink-contrast)]' : 'hover:bg-yellow hover:text-navy'
             }`}
           >
             {l.toUpperCase()}

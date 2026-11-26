@@ -34,8 +34,11 @@ export function Logo({ className = '' }: { className?: string }) {
 }
 
 /**
- * Floating "sticker" header: a paper pill with the site's chunky navy outline and hard shadow,
- * sitting over the first section of every page (pages pad their first block by --header-h).
+ * Two-state header. At the top of the page it is a full-width navy bar that blends into the
+ * navy hero; once the page scrolls (MotionRoot sets `data-scrolled`) the bar fades away and the
+ * controls sit in a floating paper "sticker" pill that stays on screen. Only opacity and
+ * transform animate. Without JS it simply stays the navy bar.
+ * Pages pad their first block by --header-h, since the header overlays it.
  */
 export async function Header({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'nav' })
@@ -45,10 +48,18 @@ export async function Header({ locale }: { locale: Locale }) {
   return (
     <header
       data-site-header
-      className="pointer-events-none sticky top-0 z-40 -mb-[var(--header-h)] h-[var(--header-h)]"
+      className="group/header pointer-events-none sticky top-0 z-40 -mb-[var(--header-h)] h-[var(--header-h)]"
     >
-      <div className="container-x flex h-full items-center">
-        <div className="bg-paper text-navy border-navy pointer-events-auto flex h-14 w-full items-center justify-between gap-3 rounded-full border-[3px] pr-1.5 pl-4 shadow-[4px_4px_0_0_var(--color-navy)] [--ink:var(--color-navy)]">
+      <div
+        aria-hidden="true"
+        className="bg-navy absolute inset-0 transition-opacity duration-300 group-data-[scrolled]/header:opacity-0 motion-reduce:transition-none"
+      />
+      <div className="container-x relative flex h-full items-center">
+        <div className="text-paper group-data-[scrolled]/header:text-navy pointer-events-auto relative isolate flex h-14 w-full items-center justify-between gap-3 pr-1.5 pl-4 [--ink-contrast:var(--color-navy)] [--ink:var(--color-paper)] group-data-[scrolled]/header:[--ink-contrast:var(--color-paper)] group-data-[scrolled]/header:[--ink:var(--color-navy)]">
+          <span
+            aria-hidden="true"
+            className="bg-paper border-navy absolute inset-0 -z-10 -translate-y-2 scale-95 rounded-full border-[3px] opacity-0 shadow-[4px_4px_0_0_var(--color-navy)] transition duration-300 ease-[var(--ease-back)] group-data-[scrolled]/header:translate-y-0 group-data-[scrolled]/header:scale-100 group-data-[scrolled]/header:opacity-100 motion-reduce:transition-none"
+          />
           <Link href="/" aria-label="INVENTO, home" className="rounded-full">
             <Logo />
           </Link>

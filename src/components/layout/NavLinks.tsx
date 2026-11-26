@@ -4,7 +4,8 @@ import { Link, usePathname } from '@/i18n/navigation'
 
 type Item = { href: string | { pathname: string; hash?: string }; label: string }
 
-/** Desktop nav: chunky display links that pop up like stickers on hover; the current section is orange. */
+/** Desktop nav: chunky display links that pop up like stickers on hover; the current section is orange.
+ * Text follows the header's colour (paper on the navy bar, navy on the pill). */
 export function NavLinks({ items }: { items: Item[] }) {
   const pathname = usePathname()
   return (
@@ -19,8 +20,8 @@ export function NavLinks({ items }: { items: Item[] }) {
               aria-current={current ? 'page' : undefined}
               className={`display inline-block rounded-full border-[3px] px-3.5 pt-1.5 pb-1 text-xl transition duration-200 ease-[var(--ease-back)] xl:px-4 ${
                 current
-                  ? 'bg-orange border-navy -rotate-2 shadow-[2px_2px_0_0_var(--color-navy)]'
-                  : 'hover:bg-yellow hover:border-navy border-transparent hover:-translate-y-0.5 hover:-rotate-2 hover:shadow-[3px_3px_0_0_var(--color-navy)]'
+                  ? 'bg-orange text-navy border-navy -rotate-2 shadow-[2px_2px_0_0_var(--color-navy)]'
+                  : 'hover:bg-yellow hover:text-navy hover:border-navy border-transparent hover:-translate-y-0.5 hover:-rotate-2 hover:shadow-[3px_3px_0_0_var(--color-navy)]'
               }`}
             >
               {item.label}
