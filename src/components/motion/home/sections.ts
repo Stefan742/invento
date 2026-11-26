@@ -152,7 +152,7 @@ export function marbleTriggers(gsap: G) {
     }
     if (anchor === 'pick') {
       const sticker = document.querySelector('[data-order-sticker]')
-      if (sticker) gsap.fromTo(sticker, { scale: 1 }, { scale: 1.25, duration: 0.18, yoyo: true, repeat: 1, ease: 'power2.out' })
+      if (sticker) gsap.fromTo(sticker, { scale: 1 }, { scale: 1.25, duration: 0.18, yoyo: true, repeat: 1, ease: 'power2.out', clearProps: 'transform' })
     }
     if (anchor === 'intro') {
       const cat = document.querySelector('[data-intro-catapult]')

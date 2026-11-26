@@ -99,7 +99,7 @@ Short log of non-obvious choices and why. Newest at the bottom of each milestone
   - **Bodies and interaction:** desktop has 18 bodies and drag/flick (the wheel listener is removed so the page still scrolls); touch has 8 bodies and no dragging, so native scroll is untouched.
   - **Efficiency:** the engine pauses off-screen and bodies sleep.
 - **Gear cursor** keeps the native cursor in text fields and inside dialogs (dialogs live in the browser's top layer above any z-index).
-- **Header** hides on scroll down and returns on scroll up or when anything in it gets keyboard focus.
+- **Header** ~~hides on scroll down~~ (superseded 2026-11-26 by owner feedback: it stays on screen; navy bar at the top, floating pill once scrolled).
 - **Kept as CSS (no JS):** orbiting info buttons bob, testimonial quotes animate in, the cart drawer slides in, the lightbox pops, the mobile menu opens like a lid. The global reduced-motion rule turns them off.
 - **Route transitions (lid wipe):** not attempted yet; M5 nice-to-have per the brief.
 - **Performance (production build, headless Chromium, mobile emulation 390 px with 4× CPU throttling + slow 4G, scripted scroll through the whole home page in 9 s):**
@@ -158,3 +158,9 @@ Short log of non-obvious choices and why. Newest at the bottom of each milestone
 - **Footer:** the lid over the wordmark is replaced by the INVENTO letters popping up out of an orange "box rim", with an orange hard text shadow. Fully visible without motion. The bottom row leaves room for the fixed order sticker.
 - **Gear cursor:** redrawn as a symmetric 8-tooth gear with room for its outline. The old drawing touched the SVG edges, so the teeth looked clipped.
 - **Add to cart:** hover lifts the button (bigger hard shadow, yellow, slight tilt) and the cart icon hops. Pressing flattens it. Hover only on devices that have hover.
+
+### Owner feedback, round 2 (2026-11-26)
+
+- **Header has two states:** at the top of every page it is a full-width navy bar (matching the navy hero), and after 24px of scroll it turns into the floating paper pill. It always stays on screen; hiding on scroll down is removed, as the owner asked for a sticky header.
+  - **How:** MotionRoot sets `data-scrolled` on the header. The navy bar and the pill are separate layers that crossfade with opacity and transform only, and the controls take their colours from `--ink` / `--ink-contrast`. This is a style state, not a motion feature, so the `header` motion flag is gone. Without JS the header stays the navy bar.
+- **Order sticker:** uses the same `btn-pop` hover as Add to cart (lift, yellow, hard shadow, the cart icon hops), on top of its own tilt. The marble's "pop" tween clears its inline transform afterwards so the hover keeps working.

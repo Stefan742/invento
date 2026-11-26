@@ -78,22 +78,24 @@ export function CartButton() {
   )
 }
 
-/** The tilted "Порачај / Order" sticker: opens the cart when it has items, otherwise goes to the kits. */
+/** The tilted "Порачај / Order" sticker (same pop hover as Add to cart): opens the cart when it has items, otherwise goes to the kits. */
 export function OrderSticker({ label }: { label: string }) {
   const lines = useCart((s) => s.lines)
   const open = useCart((s) => s.open)
   const { hydrated } = useCartContext()
   const cls =
-    'bg-orange text-navy border-navy display fixed right-4 bottom-4 z-30 grid min-h-14 rotate-[-8deg] place-items-center rounded-full border-[3px] px-6 text-2xl shadow-[4px_4px_0_0_var(--color-navy)] transition-transform hover:rotate-[-3deg] sm:right-6 sm:bottom-6 sm:text-3xl'
+    'btn-pop bg-orange text-navy border-navy display fixed right-4 bottom-4 z-30 inline-flex min-h-14 rotate-[-8deg] items-center gap-2 rounded-full border-[3px] px-6 text-2xl shadow-[4px_4px_0_0_var(--color-navy)] hover:rotate-[-3deg] sm:right-6 sm:bottom-6 sm:text-3xl'
   if (hydrated && cartCount(lines) > 0) {
     return (
       <button type="button" onClick={open} className={cls} data-order-sticker>
+        <svg viewBox="0 0 24 24" className="btn-pop-icon h-6 w-6 shrink-0" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 9h18l-2 11H5L3 9Z" /><path d="M8 9V7a4 4 0 0 1 8 0v2" /></svg>
         {label}
       </button>
     )
   }
   return (
     <Link href="/kits" className={cls} data-order-sticker>
+      <svg viewBox="0 0 24 24" className="btn-pop-icon h-6 w-6 shrink-0" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 9h18l-2 11H5L3 9Z" /><path d="M8 9V7a4 4 0 0 1 8 0v2" /></svg>
       {label}
     </Link>
   )
