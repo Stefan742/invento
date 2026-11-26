@@ -172,3 +172,9 @@ Short log of non-obvious choices and why. Newest at the bottom of each milestone
 - **Motion (revised after owner feedback, same day):** the first version swapped a flat closed lid for four open flaps, which did not make sense. Now the box opens like a real one: the two outer flaps (front-left, back-right) meet under the tape, and the two inner flaps lie beneath them. `box-flaps.ts` turns each flap around its hinge edge (free edge = hinge + cos(angle)·inward + sin(angle)·up). The side facing the viewer (navy outside / orange inside) follows from the winding of the projected flap, and the paint order swaps once the back flap is behind the box. The hero and preloader tween a 0→1 progress and call `renderFlaps()`. Outer flaps move in the first half, inner flaps in the second. When open, the front flaps hang over the walls showing their orange inner side, as a real box would.
 - **Logo mark** (`logo`): the same box with a yellow gear rising out of it and an orange spark, used in the header and as the favicon (`src/app/icon.svg`).
 - **Standalone files:** `pnpm export:brand` renders the components to `docs/brand/*.svg` (light and on-navy versions) and the favicon, so the owner can use them for print and social media.
+
+### Hero fits the screen (2026-11-26)
+
+- **Problem (owner):** on a short screen (852px tall) the box was half under the header while it opened. The hero was taller than the screen, and `stickyPin` (since the showcase fix) sticks a too-tall section by its bottom edge, which pushed the hero's top under the header.
+- **Fix:** the hero's slogan, box and spacing are capped by screen height (`svh`), so it fits from about 650px up. `stickyPin` takes `align: 'top' | 'bottom'`: the hero uses `top`, so its box never slides under the header; the showcase keeps `bottom`.
+- **Intro screen:** it still shows once per browser tab (first visit), as the brief asks. `/mk?intro` (or `/en?intro`) shows it again, for the owner and for demos.

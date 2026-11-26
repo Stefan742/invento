@@ -19,10 +19,10 @@ export async function Hero({ locale, home }: { locale: Locale; home: HomePage })
     <Section world="navy" anchor="hero" labelledBy="hero-title" className="min-h-[100dvh] pt-[var(--header-h)]" gears={false}>
       {/* Orange "inside of the box" that the scroll dive reveals (M4). Invisible without JS. */}
       <div aria-hidden="true" data-hero-orange className="bg-orange pointer-events-none absolute inset-0 z-[1]" style={{ clipPath: 'circle(0% at 50% 50%)' }} />
-      <div className="container-x relative flex min-h-[calc(100dvh-var(--header-h))] flex-col justify-center py-10">
+      <div className="container-x relative flex min-h-[calc(100dvh-var(--header-h))] flex-col justify-center py-[clamp(1rem,3svh,2.5rem)]">
         <h1
           id="hero-title"
-          className="display grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 text-[clamp(3.4rem,13.5vw,12rem)] [grid-template-areas:'w1_w1'_'box_w2'_'w3_w3']"
+          className="display grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 text-[clamp(3.4rem,min(13.5vw,15svh),12rem)] [grid-template-areas:'w1_w1'_'box_w2'_'w3_w3']"
         >
           {/* Letters are split on the server (aria-hidden) with a screen-reader copy of the word,
               so the heading reads normally and works with or without JavaScript. */}
@@ -37,7 +37,7 @@ export async function Hero({ locale, home }: { locale: Locale; home: HomePage })
             </span>
           </span>
           {/* The box sits in the middle of the slogan. Parts hover above the open lid. */}
-          <span aria-hidden="true" className="relative block w-[min(30vw,17rem)] justify-self-center [grid-area:box] [--ink:var(--color-paper)]" data-hero-box>
+          <span aria-hidden="true" className="relative block w-[min(30vw,17rem,28svh)] justify-self-center [grid-area:box] [--ink:var(--color-paper)]" data-hero-box>
             <span data-hero-part className="absolute -top-[14%] left-[2%] block w-[24%] rotate-[-12deg]">
               <Illustration name="gear" className="w-full" />
             </span>
@@ -68,7 +68,7 @@ export async function Hero({ locale, home }: { locale: Locale; home: HomePage })
           </span>
         </h1>
 
-        <div data-hero-sub className="relative z-10 mt-8 flex flex-col gap-5 sm:mt-12 sm:max-w-xl">
+        <div data-hero-sub className="relative z-10 mt-8 flex flex-col gap-[clamp(0.75rem,2.4svh,1.25rem)] sm:mt-[clamp(1.5rem,4svh,3rem)] sm:max-w-xl">
           <p className="text-xl font-semibold sm:text-2xl">{home.heroSubline || th('heroSubline')}</p>
           <p className="text-paper/70 text-sm font-bold tracking-[0.2em]" lang={other}>
             {tOther('slogan')}

@@ -32,6 +32,15 @@ test.describe('preloader', () => {
     await expect(page.locator('[data-preloader]')).toBeHidden({ timeout: 3000 })
   })
 
+  test('?intro shows it again in the same session', async ({ page }) => {
+    await page.goto('/mk?skip')
+    await page.evaluate(() => sessionStorage.setItem('invento-intro-seen', '1'))
+    await page.goto('/mk')
+    await expect(page.locator('[data-preloader]')).toBeHidden()
+    await page.goto('/mk?intro')
+    await expect(page.locator('[data-preloader]')).toBeVisible()
+  })
+
   test('?skip and other pages never show it', async ({ page }) => {
     await page.goto('/mk?skip')
     await expect(page.locator('[data-preloader]')).toBeHidden()

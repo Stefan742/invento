@@ -104,7 +104,7 @@ export function heroScroll(gsap: G, hero: HTMLElement, { desktop }: { desktop: b
     return `${b.left + b.width / 2 - h.left}px ${b.top + b.height * 0.4 - h.top}px`
   }
 
-  const pin = stickyPin(hero, () => window.innerHeight * (desktop ? 1.8 : 1.1))
+  const pin = stickyPin(hero, () => window.innerHeight * (desktop ? 1.8 : 1.1), { align: 'top' })
   const tl = gsap.timeline({
     defaults: { ease: 'none' },
     scrollTrigger: {

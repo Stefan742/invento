@@ -4,19 +4,21 @@
  * Sticky offsets are scroll-driven, so they are not layout shifts, and they do not jitter
  * with native touch scrolling.
  */
-export function stickyPin(el: HTMLElement, distance: () => number) {
+export function stickyPin(el: HTMLElement, distance: () => number, { align = 'bottom' }: { align?: 'top' | 'bottom' } = {}) {
   const wrap = document.createElement('div')
   wrap.dataset.stickyPin = ''
   el.parentNode!.insertBefore(wrap, el)
   wrap.appendChild(el)
   el.style.position = 'sticky'
   el.style.top = '0'
-  /** How much taller than the screen the element is (0 when it fits). */
-  const overflow = () => Math.max(0, el.offsetHeight - window.innerHeight)
+  /** How far the element scrolls before it sticks: how much taller than the screen it is when
+   * bottom-aligned (0 when it fits); always 0 when top-aligned. */
+  const overflow = () => (align === 'top' ? 0 : Math.max(0, el.offsetHeight - window.innerHeight))
   const size = () => {
     wrap.style.height = `${el.offsetHeight + Math.max(0, distance())}px`
-    // A section taller than the screen sticks with its bottom edge on the screen's bottom,
-    // so nothing (like the order buttons) is cut off while it is pinned.
+    // align 'bottom': a section taller than the screen sticks with its bottom edge on the
+    // screen's bottom, so nothing (like the order buttons) is cut off while it is pinned.
+    // align 'top': it sticks at the top, so its top part (the hero box) never slides under the header.
     el.style.top = `${-overflow()}px`
   }
   size()
