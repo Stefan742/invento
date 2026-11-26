@@ -62,7 +62,7 @@ export function CartButton() {
       type="button"
       onClick={open}
       data-cart-button
-      className="border-paper relative grid h-12 w-12 place-items-center rounded-full border-[3px]"
+      className="bg-orange text-navy border-navy relative grid h-11 w-11 place-items-center rounded-full border-[3px] transition duration-200 ease-[var(--ease-back)] hover:-translate-y-0.5 hover:-rotate-6 hover:shadow-[3px_3px_0_0_var(--color-navy)] active:translate-y-0"
       aria-label={`${t('open')}: ${t('items', { count })}`}
     >
       <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -70,7 +70,7 @@ export function CartButton() {
         <path d="M8 9V7a4 4 0 0 1 8 0v2" />
       </svg>
       {count > 0 ? (
-        <span aria-hidden="true" className="bg-orange text-navy border-navy absolute -top-1.5 -right-1.5 grid h-6 min-w-6 place-items-center rounded-full border-2 px-1 text-xs font-black">
+        <span aria-hidden="true" className="bg-navy text-paper border-paper absolute -top-2 -right-2 grid h-6 min-w-6 place-items-center rounded-full border-2 px-1 text-xs font-black">
           {count}
         </span>
       ) : null}
@@ -142,8 +142,9 @@ export function AddToCart({
       <button
         type="button"
         onClick={onAdd}
-        className="bg-orange text-navy border-navy relative z-10 inline-flex min-h-11 items-center rounded-full border-[3px] px-4 text-sm font-bold shadow-[3px_3px_0_0_var(--color-navy)]"
+        className="btn-pop bg-orange text-navy border-navy relative z-10 inline-flex min-h-11 items-center gap-1.5 rounded-full border-[3px] px-4 text-sm font-bold shadow-[3px_3px_0_0_var(--color-navy)]"
       >
+        <svg viewBox="0 0 24 24" className="btn-pop-icon h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 9h18l-2 11H5L3 9Z" /><path d="M8 9V7a4 4 0 0 1 8 0v2" /></svg>
         {tc('addToCart')}
         <span className="sr-only">: {title}</span>
       </button>
@@ -156,8 +157,9 @@ export function AddToCart({
       <button
         type="button"
         onClick={onAdd}
-        className="bg-orange text-navy border-navy inline-flex min-h-12 items-center rounded-full border-[3px] px-6 font-bold shadow-[4px_4px_0_0_var(--color-navy)]"
+        className="btn-pop bg-orange text-navy border-navy inline-flex min-h-12 items-center gap-2 rounded-full border-[3px] px-6 font-bold shadow-[4px_4px_0_0_var(--color-navy)]"
       >
+        <svg viewBox="0 0 24 24" className="btn-pop-icon h-5 w-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 9h18l-2 11H5L3 9Z" /><path d="M8 9V7a4 4 0 0 1 8 0v2" /></svg>
         {tc('addToCart')}
       </button>
     </div>

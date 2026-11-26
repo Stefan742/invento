@@ -16,7 +16,7 @@ export async function Hero({ locale, home }: { locale: Locale; home: HomePage })
   const words = [home.heroWord1 || defaults[0], home.heroWord2 || defaults[1], home.heroWord3 || defaults[2]]
 
   return (
-    <Section world="navy" anchor="hero" labelledBy="hero-title" className="min-h-[calc(100dvh-var(--header-h))]" gears={false}>
+    <Section world="navy" anchor="hero" labelledBy="hero-title" className="min-h-[100dvh] pt-[var(--header-h)]" gears={false}>
       {/* Orange "inside of the box" that the scroll dive reveals (M4). Invisible without JS. */}
       <div aria-hidden="true" data-hero-orange className="bg-orange pointer-events-none absolute inset-0 z-[1]" style={{ clipPath: 'circle(0% at 50% 50%)' }} />
       <div className="container-x relative flex min-h-[calc(100dvh-var(--header-h))] flex-col justify-center py-10">

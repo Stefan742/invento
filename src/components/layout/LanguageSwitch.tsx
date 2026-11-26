@@ -5,10 +5,44 @@ import { useLocale } from 'next-intl'
 import { Link, usePathname } from '@/i18n/navigation'
 import { locales } from '@/i18n/routing'
 
-/** MK / EN switch that keeps the visitor on the same page. */
-export function LanguageSwitch({ className = '', label }: { className?: string; label: string }) {
+/**
+ * MK / EN switch that keeps the visitor on the same page.
+ * `pill`: a segmented toggle for the header (navy marks the current language).
+ */
+export function LanguageSwitch({
+  className = '',
+  label,
+  variant = 'text',
+}: {
+  className?: string
+  label: string
+  variant?: 'text' | 'pill'
+}) {
   const pathname = usePathname()
   const current = useLocale()
+
+  if (variant === 'pill') {
+    return (
+      <nav aria-label={label} className={`border-navy items-center rounded-full border-[3px] p-0.5 text-sm font-black ${className}`}>
+        {locales.map((l) => (
+          <Link
+            key={l}
+            href={pathname}
+            locale={l}
+            hrefLang={l}
+            lang={l}
+            aria-current={l === current ? 'true' : undefined}
+            className={`grid h-9 min-w-10 place-items-center rounded-full px-2 uppercase transition-colors ${
+              l === current ? 'bg-navy text-paper' : 'hover:bg-yellow'
+            }`}
+          >
+            {l.toUpperCase()}
+          </Link>
+        ))}
+      </nav>
+    )
+  }
+
   return (
     <nav aria-label={label} className={`flex items-center gap-1 font-bold ${className}`}>
       {locales.map((l, i) => (

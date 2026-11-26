@@ -50,13 +50,13 @@ export function MobileMenu({
         aria-expanded={open}
         aria-controls={id}
         onClick={() => setOpen((o) => !o)}
-        className="border-paper relative z-[60] grid h-12 w-12 place-items-center rounded-full border-[3px]"
+        className="border-navy hover:bg-yellow relative z-[60] grid h-11 w-11 place-items-center rounded-full border-[3px] transition-colors"
       >
         <span className="sr-only">{open ? closeLabel : openLabel}</span>
         <span aria-hidden="true" className="flex flex-col gap-1.5">
-          <span className={`bg-paper block h-[3px] w-6 rounded transition-transform ${open ? 'translate-y-[9px] rotate-45' : ''}`} />
-          <span className={`bg-paper block h-[3px] w-6 rounded transition-opacity ${open ? 'opacity-0' : ''}`} />
-          <span className={`bg-paper block h-[3px] w-6 rounded transition-transform ${open ? '-translate-y-[9px] -rotate-45' : ''}`} />
+          <span className={`bg-navy block h-[3px] w-5 rounded transition-transform ${open ? 'translate-y-[9px] rotate-45' : ''}`} />
+          <span className={`bg-navy block h-[3px] w-5 rounded transition-opacity ${open ? 'opacity-0' : ''}`} />
+          <span className={`bg-navy block h-[3px] w-5 rounded transition-transform ${open ? '-translate-y-[9px] -rotate-45' : ''}`} />
         </span>
       </button>
       <div

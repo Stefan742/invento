@@ -64,6 +64,12 @@
   svg {
     max-width: 100%;
   }
+  /* The floating header overlays the top of every page: the first block extends its own
+     background behind it and starts its content below it. A transparent border adds the space
+     without fighting the block's own padding utilities. (The home hero does this itself.) */
+  #main:not([data-home]) > :first-child {
+    border-top: var(--header-h) solid transparent;
+  }
 }
 
 @layer components {
@@ -208,11 +214,17 @@ html.show-preloader body {
   position: fixed;
   top: 0;
   left: 0;
+  width: 40px;
+  height: 40px;
   z-index: 90;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.2s;
   will-change: transform;
+}
+.gear-cursor svg {
+  display: block;
+  max-width: none;
 }
 html.has-gear-cursor,
 html.has-gear-cursor * {
@@ -222,6 +234,35 @@ html.has-gear-cursor :is(input, textarea, select, [contenteditable='true']),
 html.has-gear-cursor dialog,
 html.has-gear-cursor dialog * {
   cursor: auto;
+}
+
+/* Add-to-cart: the sticker lifts off the page on hover (bigger hard shadow, yellow) and
+   presses flat on click; the little cart icon gives a hop. Unlayered so it beats the
+   buttons' own shadow utilities. */
+.btn-pop {
+  transition:
+    transform 0.2s var(--ease-back),
+    box-shadow 0.2s var(--ease-back),
+    background-color 0.15s;
+}
+@media (hover: hover) {
+  .btn-pop:hover {
+    transform: translate(-2px, -3px) rotate(-1.5deg);
+    box-shadow: 6px 7px 0 0 var(--color-navy);
+    background-color: var(--color-yellow);
+  }
+  .btn-pop:hover .btn-pop-icon {
+    animation: cart-hop 0.45s var(--ease-back);
+  }
+}
+.btn-pop:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 0 var(--color-navy);
+}
+@keyframes cart-hop {
+  40% {
+    transform: translateY(-4px) rotate(-12deg);
+  }
 }
 
 /* Dialog + menu entrances (CSS only; the global reduced-motion rule turns them off). */
