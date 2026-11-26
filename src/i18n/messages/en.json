@@ -107,7 +107,11 @@
         "body": "You pay on delivery. Open the box and start."
       }
     ],
-    "testimonialOf": "Testimonial {n} of {total}"
+    "testimonialOf": "Testimonial {n} of {total}",
+    "heroTags": [
+      "Ages 6–12",
+      "Wooden kits"
+    ]
   },
   "kits": {
     "title": "BOXES",

@@ -93,7 +93,7 @@ export function heroScroll(gsap: G, hero: HTMLElement, { desktop }: { desktop: b
   const boxArt = hero.querySelector<HTMLElement>('[data-hero-boxart]')
   const parts = hero.querySelectorAll<HTMLElement>('[data-hero-part]')
   const words = hero.querySelectorAll<HTMLElement>('[data-hero-word]')
-  const sub = hero.querySelector<HTMLElement>('[data-hero-sub]')
+  const sub = hero.querySelectorAll<HTMLElement>('[data-hero-sub]')
   const orange = hero.querySelector<HTMLElement>('[data-hero-orange]')
   if (!box || !boxArt || !orange) return
 
@@ -126,7 +126,7 @@ export function heroScroll(gsap: G, hero: HTMLElement, { desktop }: { desktop: b
   tl.to(words[0] ?? [], { xPercent: -70, opacity: 0, duration: 0.35 }, 0.55)
   tl.to(words[1] ?? [], { xPercent: 70, opacity: 0, duration: 0.35 }, 0.55)
   tl.to(words[2] ?? [], { xPercent: -70, opacity: 0, duration: 0.35 }, 0.6)
-  if (sub) tl.to(sub, { opacity: 0, y: 40, duration: 0.25 }, 0.5)
+  if (sub.length) tl.to(sub, { opacity: 0, y: 40, duration: 0.25 }, 0.5)
   tl.to(parts, { opacity: 0, scale: 1.6, duration: 0.2 }, 0.7)
   // 4. camera dives into the box
   tl.to(box, { scale: desktop ? 9 : 7, transformOrigin: '50% 40%', duration: 0.5, ease: 'power2.in' }, 0.65)
