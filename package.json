@@ -23,7 +23,8 @@
     "migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
     "migrate:create": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:create",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
-    "export:brand": "tsx scripts/export-brand.ts"
+    "export:brand": "tsx scripts/export-brand.ts",
+    "kit:catapult": "node kits/catapult/src/build.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^7.0.9",

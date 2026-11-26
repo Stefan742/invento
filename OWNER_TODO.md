@@ -84,3 +84,12 @@ All copy below is a **draft** written for you to approve or rewrite. It makes no
 
 - [ ] **Hosting, monthly cost and domain** (Gate 3): read [`docs/HOSTING.md`](docs/HOSTING.md) and approve an option. Recommended: Railway, about $10/month, plus a `.mk` domain at about 900 MKD/year. Then create the accounts in your own name (host, Cloudflare, Resend) and register the domain. Nothing is deployed before you approve.
 - [ ] **Analytics:** choose one of the cookieless options in [`docs/ANALYTICS.md`](docs/ANALYTICS.md). We recommend Cloudflare Web Analytics, which is free and also reports real-phone speed. Nothing is installed until you decide; switching it on only takes two environment variables.
+
+## Box 01: mini catapult (product)
+
+- [ ] Find a laser-cutting woodworker. Send `kits/catapult/catapult-woodworker-mk.pdf`, `cut/catapult-4mm.svg` and `cut/test-piece-4mm.svg` (a ready message is in `kits/catapult/README.md`).
+- [ ] Get the test-piece result and the real sheet thickness back; I rebuild the cut file for that sheet.
+- [ ] Order 1–2 prototypes; test with 2–3 children (building from the guide, throwing, band strength).
+- [ ] Buy and test rubber bands (about 32 mm long when flat) and 25 mm soft pom-poms.
+- [ ] Print the guide (A5) and target (A4) for the prototype boxes; note what confused the children.
+- [ ] Check toy-safety rules for selling (see the safety item above) before the first sale.
