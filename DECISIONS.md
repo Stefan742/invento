@@ -196,3 +196,10 @@ Short log of non-obvious choices and why. Newest at the bottom of each milestone
 - **Fits are final sizes.** The woodworker compensates kerf. A test piece checks real sheet thickness and dowel fit first; `--t=<mm>` rebuilds for a measured sheet.
 - **Engraving uses a built-in single-line font,** so the laser software needs no fonts and the file has only red (cut) and blue (engrave) lines.
 - **Claims:** the guide has the standard "not for under 3, small parts" warning and play-safety rules, but no safety, certification or performance claims. Distances, build time and band size are left to the prototype test.
+
+## Box 02: rubber-band racing car (product files, 2026-11-26)
+
+- **Shared kit tools.** The catapult's generic code moved to `kits/shared/`: 2D helpers, the engraving font, the cut-file writers, the isometric renderer, flat drawings, page styles + PDF printing, and a 12-page guide template (`guide.mjs`). The catapult was rebuilt after each move and its cut files, pictures and HTML stayed byte-identical. Box 02 is built on the shared tools.
+- **No woodworker spec for box 02** (owner request). The cut files and test piece are still generated, because they come from the same model, and box 01's spec sheet explains the same colours and fits.
+- **Mechanism:** two race-car side panels hold a back axle (3-disc Ø60 wheels with a groove for a rubber-band tyre) and a front axle (2-disc Ø40 wheels). The motor band runs from a slot hook in the front cross piece to a notched hub on the back axle. It slips off at the end of the run, so the car coasts. Cross-piece tabs of different heights make the frame impossible to assemble wrong; the left panel is cut mirrored so its engraving reads from outside.
+- **Claims:** the guide repeats only facts from the geometry (Ø60 wheel ≈ 19 cm per turn) and a well-known history fact (first petrol car, 1886). Band sizes and distances are left to the prototype.

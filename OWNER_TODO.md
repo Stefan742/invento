@@ -93,3 +93,9 @@ All copy below is a **draft** written for you to approve or rewrite. It makes no
 - [ ] Buy and test rubber bands (about 32 mm long when flat) and 25 mm soft pom-poms.
 - [ ] Print the guide (A5) and target (A4) for the prototype boxes; note what confused the children.
 - [ ] Check toy-safety rules for selling (see the safety item above) before the first sale.
+
+## Box 02: racing car (product)
+
+- [ ] Send `kits/car/cut/car-4mm.svg` (and the test piece) to the woodworker with box 01, or after the catapult prototype.
+- [ ] Prototype: test motor bands (about 90–100 mm long when flat, or two linked) and tyre bands for the Ø54 groove.
+- [ ] Print the guide (A5) and the finish sheet (A4) for the prototype boxes.

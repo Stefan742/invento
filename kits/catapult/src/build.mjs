@@ -7,20 +7,18 @@
  *   pnpm kit:catapult              → standard 4 mm and 3 mm files
  *   pnpm kit:catapult --t=3.8      → also a cut file for a measured 3.8 mm sheet
  */
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { mkdirSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { chromium } from '@playwright/test'
-
+import { BASE_CSS, FONTS, logo, logoMarkSvg, printPdfs } from '../../shared/doc.mjs'
 import { GUIDE } from './content.mjs'
 import { bbox, couponSvg, cutSvg, sheetPictureSvg } from './cutfile.mjs'
 import { dowelSvg, partSvg, sideViewSvg, targetSvg } from './diagrams.mjs'
 import { deg, makeKit } from './geometry.mjs'
-import { camera, catapultScene, renderScene } from './render.mjs'
+import { camera, catapultScene, renderBall, renderScene } from './render.mjs'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
-const REPO = join(ROOT, '..', '..')
 const out = (...p) => join(ROOT, ...p)
 mkdirSync(out('cut'), { recursive: true })
 mkdirSync(out('images'), { recursive: true })
@@ -74,7 +72,7 @@ const IMG = {}
 {
   const f = flight()
   const scene = catapultScene(kit, { theta: 135, band: true })
-  scene.items.push({ kind: 'ball', at: f.pts[14] })
+  scene.items.push({ render: (c, S) => renderBall({ at: f.pts[14] }, c, S) })
   IMG.cover = renderScene(scene, {
     cam,
     paths: [{ points: f.pts.slice(0, 14), color: '#FFD166', dash: '2 9', width: 3.4 }],
@@ -201,30 +199,6 @@ IMG.step7 = renderScene(
   })
 }
 for (const [k, svg] of Object.entries(IMG)) writeFileSync(out('images', `catapult-${k}.svg`), svg)
-
-/* ---------------- shared page styles ---------------- */
-const FONTS =
-  '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:wght@800&family=Onest:wght@400..800&display=block" rel="stylesheet">'
-const BASE_CSS = `
-:root{--navy:#0D1B2A;--navy2:#1E3550;--orange:#FF7A00;--orange-d:#E06400;--yellow:#FFD166;--teal:#00B4DB;--paper:#F2F2F2;--wood:#E9B872}
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
-body{font-family:Onest,system-ui,sans-serif;color:var(--navy);-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.d{font-family:'Fira Sans Extra Condensed',sans-serif;font-weight:800;text-transform:uppercase;line-height:.9;letter-spacing:.01em}
-.page{position:relative;overflow:hidden;break-after:page;background:var(--paper)}
-.page:last-child{break-after:auto}
-.blob{position:absolute;border-radius:50%;pointer-events:none}
-.sticker{display:inline-block;border:.6mm solid var(--navy);border-radius:99mm;padding:1.3mm 3.4mm 1mm;box-shadow:.8mm .8mm 0 var(--navy);font-family:'Fira Sans Extra Condensed',sans-serif;font-weight:800;text-transform:uppercase;line-height:1}
-.card{background:#fff;border:.6mm solid var(--navy);border-radius:4mm;box-shadow:1.1mm 1.1mm 0 var(--navy)}
-svg{display:block}
-`
-const logoMarkSvg = (onNavy) =>
-  readFileSync(
-    join(REPO, 'docs', 'brand', onNavy ? 'invento-mark-on-navy.svg' : 'invento-mark.svg'),
-    'utf8',
-  ).replace(/<\?xml.*?\?>\s*/, '')
-const logo = (onNavy, size = 9) =>
-  `<div style="display:flex;align-items:center;gap:1.6mm"><div style="width:${size}mm;height:${size}mm">${logoMarkSvg(onNavy)}</div><span class="d" style="font-size:${size * 0.75}mm;color:${onNavy ? 'var(--paper)' : 'var(--navy)'}">INVENTO</span></div>`
 
 /* ---------------- building guide (A5) ---------------- */
 function guideHtml(lang) {
@@ -572,21 +546,15 @@ function targetHtml() {
 }
 
 /* ---------------- print ---------------- */
-const browser = await chromium.launch()
-async function pdf(html, file, opts) {
-  const page = await browser.newPage()
-  await page.setContent(html, { waitUntil: 'networkidle' })
-  await page.evaluate(() => document.fonts.ready)
-  await page.pdf({ path: out(file), printBackground: true, preferCSSPageSize: true, ...opts })
-  writeFileSync(out('html', file.replace('.pdf', '.html')), html)
-  await page.close()
-}
-mkdirSync(out('html'), { recursive: true })
-await pdf(guideHtml('mk'), 'catapult-guide-mk.pdf')
-await pdf(guideHtml('en'), 'catapult-guide-en.pdf')
-await pdf(specHtml(), 'catapult-woodworker-mk.pdf')
-await pdf(targetHtml(), 'catapult-target.pdf')
-await browser.close()
+await printPdfs(
+  [
+    { html: guideHtml('mk'), file: 'catapult-guide-mk.pdf' },
+    { html: guideHtml('en'), file: 'catapult-guide-en.pdf' },
+    { html: specHtml(), file: 'catapult-woodworker-mk.pdf' },
+    { html: targetHtml(), file: 'catapult-target.pdf' },
+  ],
+  out,
+)
 console.log(
   'INVENTO box 01 built:',
   thicknesses.map((t) => `${t} mm`).join(', '),
