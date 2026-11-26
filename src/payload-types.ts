@@ -286,6 +286,8 @@ export interface Media {
    * Describe the image for people who cannot see it, e.g. "Wooden catapult kit, assembled". / Опишете ја сликата, на пр. „Склопена дрвена катапулта“.
    */
   alt: string;
+  prefix?: string | null;
+  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -812,6 +814,8 @@ export interface BuildsSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  prefix?: T;
+  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;

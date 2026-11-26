@@ -1,6 +1,7 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { resendAdapter } from '@payloadcms/email-resend'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { s3Storage } from '@payloadcms/storage-s3'
 import path from 'path'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
@@ -64,5 +65,24 @@ export default buildConfig({
   cors: [process.env.NEXT_PUBLIC_SITE_URL || ''].filter(Boolean),
   csrf: [process.env.NEXT_PUBLIC_SITE_URL || ''].filter(Boolean),
   sharp,
-  plugins: [],
+  plugins: [
+    // Production media lives in S3-compatible storage (Cloudflare R2). Without S3_BUCKET
+    // (local dev) files stay on disk in /media. Files are still served through Payload's
+    // /api/media/file/* route, so access control, image URLs and the CSP stay the same.
+    s3Storage({
+      enabled: Boolean(process.env.S3_BUCKET),
+      alwaysInsertFields: true, // same DB schema with and without the plugin (dev = prod migrations)
+      collections: { media: true },
+      bucket: process.env.S3_BUCKET || '',
+      config: {
+        endpoint: process.env.S3_ENDPOINT || undefined,
+        region: process.env.S3_REGION || 'auto',
+        forcePathStyle: Boolean(process.env.S3_ENDPOINT),
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+        },
+      },
+    }),
+  ],
 })
