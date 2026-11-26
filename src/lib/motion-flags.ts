@@ -17,7 +17,7 @@ export const MOTION_FEATURES = [
   'hiw', // how-it-works fanned cards
   'gallery', // drifting photos parallax
   'physics', // falling parts in the Questions section
-  'footer', // lid closes over the footer wordmark
+  'footer', // footer wordmark letters pop up out of the box rim
   'transitions', // lid wipe between pages
 ] as const
 

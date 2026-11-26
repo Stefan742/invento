@@ -75,7 +75,7 @@ export function HomeMotion() {
         if (motionEnabled('hiw')) sections.howItWorksCards(gsap, main, { desktop })
         if (motionEnabled('reveals') && desktop) sections.sectionReveals(gsap, main)
         if (motionEnabled('gallery') && desktop) sections.galleryDrift(gsap, main)
-        if (motionEnabled('footer')) sections.footerLid(gsap)
+        if (motionEnabled('footer')) sections.footerWordmark(gsap)
 
         if (motionEnabled('marble')) {
           trackApi = track.createTrack(main, { mobile: !desktop, onPass: sections.marbleTriggers(gsap) })

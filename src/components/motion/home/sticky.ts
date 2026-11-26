@@ -11,13 +11,19 @@ export function stickyPin(el: HTMLElement, distance: () => number) {
   wrap.appendChild(el)
   el.style.position = 'sticky'
   el.style.top = '0'
+  /** How much taller than the screen the element is (0 when it fits). */
+  const overflow = () => Math.max(0, el.offsetHeight - window.innerHeight)
   const size = () => {
     wrap.style.height = `${el.offsetHeight + Math.max(0, distance())}px`
+    // A section taller than the screen sticks with its bottom edge on the screen's bottom,
+    // so nothing (like the order buttons) is cut off while it is pinned.
+    el.style.top = `${-overflow()}px`
   }
   size()
   return {
     wrap,
     size,
+    overflow,
     undo() {
       el.style.position = ''
       el.style.top = ''

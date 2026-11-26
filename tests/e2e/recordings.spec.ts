@@ -119,7 +119,7 @@ test.describe('@motion recordings', () => {
     })
   })
 
-  test('4 reveals, questions physics, gallery and footer lid', async ({ browser }) => {
+  test('4 reveals, questions physics, gallery and footer wordmark', async ({ browser }) => {
     await record(browser, '4-lower-desktop', 'desktop', async (page) => {
       await page.goto('/mk', { waitUntil: 'networkidle' })
       await page.waitForTimeout(1500)
@@ -178,7 +178,7 @@ test.describe('@motion recordings', () => {
       }
       await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight))
       await page.waitForTimeout(1500)
-      await shot(page, `${size}-8-footer-lid`)
+      await shot(page, `${size}-8-footer-wordmark`)
       await ctx.close()
     })
   }

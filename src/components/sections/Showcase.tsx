@@ -21,9 +21,9 @@ export async function Showcase({ locale, kits, title }: { locale: Locale; kits: 
 
   return (
     <Section world="yellow" anchor="showcase" labelledBy="showcase-title" side="right">
-      <div className="container-x pt-20 sm:pt-28">
+      <div className="container-x pt-[clamp(5rem,12svh,7rem)]">
         <div className="relative inline-block">
-          <GiantTitle id="showcase-title">{title || th('showcaseTitle')}</GiantTitle>
+          <GiantTitle id="showcase-title" className="text-[clamp(3rem,min(12vw,15svh),10rem)]">{title || th('showcaseTitle')}</GiantTitle>
           <Illustration
             name="gear-orange"
             className="absolute -top-6 -right-10 w-16 rotate-12 sm:-right-16 sm:w-24"
@@ -33,7 +33,7 @@ export async function Showcase({ locale, kits, title }: { locale: Locale; kits: 
       </div>
       <ul
         data-showcase-track
-        className="mt-10 flex snap-x snap-mandatory gap-6 overflow-x-auto px-[max(1rem,calc((100vw-88rem)/2+3rem))] pb-20 [scrollbar-width:thin] sm:pb-28"
+        className="mt-[clamp(1rem,4svh,2.5rem)] flex snap-x snap-mandatory gap-6 overflow-x-auto px-[max(1rem,calc((100vw-88rem)/2+3rem))] pb-[clamp(3rem,8svh,7rem)] [scrollbar-width:thin]"
         aria-label={title || th('showcaseTitle')}
       >
         {kits.map((kit, i) => {
@@ -50,7 +50,7 @@ export async function Showcase({ locale, kits, title }: { locale: Locale; kits: 
                   {pad(i + 1)}
                   <span className="opacity-40">/{pad(kits.length)}</span>
                 </p>
-                <div className="relative mx-auto aspect-square w-[min(72vw,26rem)]">
+                <div className="relative mx-auto aspect-square w-[min(72vw,26rem,46svh)]">
                   {/* the disc */}
                   <div className="bg-orange border-navy absolute inset-0 rounded-full border-[3px]" />
                   <div className="absolute inset-[12%] overflow-hidden rounded-full">
@@ -75,12 +75,12 @@ export async function Showcase({ locale, kits, title }: { locale: Locale; kits: 
                     </span>
                   ) : null}
                 </div>
-                <div className="space-y-4">
-                  <p className="display hidden text-[clamp(3.5rem,8vw,8rem)] md:block" aria-hidden="true">
+                <div className="space-y-[clamp(0.5rem,2svh,1rem)]">
+                  <p className="display hidden text-[clamp(3rem,min(8vw,12svh),8rem)] md:block" aria-hidden="true">
                     {pad(i + 1)}
                     <span className="opacity-40">/{pad(kits.length)}</span>
                   </p>
-                  <h3 className="display text-[clamp(2.75rem,7vw,6rem)]">{kit.title}</h3>
+                  <h3 className="display text-[clamp(2.5rem,min(7vw,9svh),6rem)]">{kit.title}</h3>
                   {kit.shortDescription ? <p className="max-w-md text-lg">{kit.shortDescription}</p> : null}
                   <Link
                     href={`/kits/${kit.slug}`}

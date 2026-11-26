@@ -79,7 +79,7 @@ Pause all orders: Admin → Site settings → Orders → untick **Orders are ope
 
 ## Motion
 
-The home page "box" experience (preloader, lid-opening hero, marble track, section hand-offs, pinned showcase, fanned cards, physics, footer lid) plus site-wide smooth scroll, gear cursor and auto-hiding header. Code lives in `src/components/motion/`.
+The home page "box" experience (preloader, lid-opening hero, marble track, section hand-offs, pinned showcase, fanned cards, physics, footer wordmark pop-up) plus site-wide smooth scroll, gear cursor and auto-hiding header. Code lives in `src/components/motion/`.
 
 - Everything is an enhancement: content is in the server HTML, and reduced motion, no JavaScript or `?motion=off` all give a complete static site.
 - Switch features off at build time with `NEXT_PUBLIC_MOTION_OFF=all` or a comma list (`smooth, header, cursor, preloader, hero, marble, reveals, showcase, hiw, gallery, physics, footer`). Try it per page view with `?motion=off:marble,physics`.

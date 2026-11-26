@@ -80,21 +80,20 @@ export async function Footer({ locale, settings }: { locale: Locale; settings: S
           </div>
         </div>
       </div>
-      <div className="container-x relative overflow-hidden" aria-hidden="true" data-footer-wordmark>
-        {/* The box lid closes over the wordmark at the very bottom (M4). Hidden above until JS moves it. */}
-        <div
-          data-footer-lid
-          className="bg-navy-90 border-orange absolute inset-x-[2%] top-0 z-10 h-[34%] origin-top rounded-b-2xl border-b-[6px]"
-          style={{ transform: 'translateY(-105%)' }}
-        >
-          <span className="bg-orange absolute bottom-3 left-1/2 block h-2 w-24 -translate-x-1/2 rounded-full" />
-        </div>
-        <p className="display text-paper -mb-[0.12em] text-center text-[clamp(4.5rem,24vw,22rem)] leading-[0.8] select-none">
-          INVENTO
+      {/* The wordmark sits in the "box": its letters pop up out of the orange rim as the bottom
+          of the page is reached (M4 motion; static and fully visible without it). */}
+      <div className="container-x overflow-hidden pt-6" aria-hidden="true" data-footer-wordmark>
+        <p className="display text-paper flex justify-center pb-[0.06em] text-[clamp(4.5rem,23vw,21rem)] leading-[0.8] select-none [text-shadow:0.035em_0.035em_0_var(--color-orange)]">
+          {'INVENTO'.split('').map((ch, i) => (
+            <span key={i} data-footer-letter className="inline-block origin-bottom">
+              {ch}
+            </span>
+          ))}
         </p>
       </div>
-      <div className="border-orange/60 border-t">
-        <div className="container-x flex flex-col items-center justify-between gap-2 py-5 text-sm sm:flex-row">
+      <div className="bg-orange h-1.5" aria-hidden="true" />
+      <div>
+        <div className="container-x flex flex-col items-center justify-between gap-2 pt-5 pb-24 text-sm sm:flex-row sm:pb-5 sm:pr-52">
           <p>{tc('madeIn')}</p>
           <p>© {new Date().getFullYear()} INVENTO</p>
         </div>

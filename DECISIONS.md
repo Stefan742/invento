@@ -148,3 +148,13 @@ Short log of non-obvious choices and why. Newest at the bottom of each milestone
   - **Served through Payload:** files are still served through `/api/media/file/*` instead of public bucket URLs. That keeps the Builds consent and draft access rules, leaves `next/image` patterns and the CSP unchanged, and keeps the bucket private.
   - **Schema:** `alwaysInsertFields: true` keeps the DB schema identical with and without the plugin. Migration `storage_s3` adds `media.prefix` and `media._objectkey`.
   - **Not yet tested against a real bucket:** the MinIO images are no longer public, so the first real upload is tested against R2 during deployment.
+
+### Owner feedback before hosting (2026-11-26)
+
+- **Header:** now a floating paper "sticker" pill with the navy outline and hard shadow used across the site. Nav links are in the display font and pop up yellow on hover; the current section is orange. The language toggle is a small segmented pill and the cart is an orange button.
+  - **Layout:** the header overlays the top of each page. The first block of every page reserves `--header-h` with a transparent top border, so its own background shows behind the header without fighting padding utilities. The home hero pads itself.
+- **Showcase fits the screen:** slide sizes are capped by screen height (`svh`), and while pinned the section fills the screen with its content centred.
+  - **Fallback:** if a section is still taller than the screen, `stickyPin` sticks it by its bottom edge, so the order buttons are never cut off. The horizontal scroll starts only once it is stuck.
+- **Footer:** the lid over the wordmark is replaced by the INVENTO letters popping up out of an orange "box rim", with an orange hard text shadow. Fully visible without motion. The bottom row leaves room for the fixed order sticker.
+- **Gear cursor:** redrawn as a symmetric 8-tooth gear with room for its outline. The old drawing touched the SVG edges, so the teeth looked clipped.
+- **Add to cart:** hover lifts the button (bigger hard shadow, yellow, slight tilt) and the cart icon hops. Pressing flattens it. Hover only on devices that have hover.

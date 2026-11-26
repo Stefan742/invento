@@ -47,6 +47,8 @@ export function showcasePin(gsap: G, main: HTMLElement) {
   // Switch the list from native scrolling to a transformed strip while pinned.
   track.style.overflow = 'visible'
   track.style.scrollSnapType = 'none'
+  // While pinned the section fills the screen, with its content centred vertically.
+  Object.assign(sec.style, { minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' })
   const distance = () => Math.max(0, track.scrollWidth - window.innerWidth)
   const pin = stickyPin(sec, distance)
   const tween = gsap.to(track, {
@@ -54,7 +56,8 @@ export function showcasePin(gsap: G, main: HTMLElement) {
     ease: 'none',
     scrollTrigger: {
       trigger: pin.wrap,
-      start: 'top top',
+      // The strip moves only while the section is actually stuck (see stickyPin overflow).
+      start: () => `top+=${pin.overflow()} top`,
       end: 'bottom bottom',
       scrub: 0.7,
       invalidateOnRefresh: true,
@@ -65,6 +68,7 @@ export function showcasePin(gsap: G, main: HTMLElement) {
     tween.scrollTrigger?.kill()
     tween.revert()
     pin.undo()
+    Object.assign(sec.style, { minHeight: '', display: '', flexDirection: '', justifyContent: '' })
     track.style.overflow = ''
     track.style.scrollSnapType = ''
   }
@@ -118,27 +122,24 @@ export function galleryDrift(gsap: G, main: HTMLElement) {
   })
 }
 
-/** Footer: the lid closes over the INVENTO wordmark as the bottom of the page is reached. */
-export function footerLid(gsap: G) {
-  const lid = document.querySelector<HTMLElement>('[data-footer-lid]')
+/**
+ * Footer: the INVENTO letters pop up out of the box rim one after another, with a little
+ * deterministic tilt, finishing upright exactly at the bottom of the page.
+ */
+export function footerWordmark(gsap: G) {
   const wordmark = document.querySelector<HTMLElement>('[data-footer-wordmark]')
-  if (!lid || !wordmark) return
-  // Replace the inline server transform (GSAP would otherwise keep it as a pixel offset).
-  lid.style.transform = ''
-  gsap.fromTo(
-    lid,
-    { y: 0, yPercent: -105, rotation: -6 },
-    {
-      y: 0,
-      yPercent: 0,
-      rotation: 0,
-      ease: 'power2.in',
-      // Ends at the very bottom of the page (the wordmark never reaches the viewport bottom).
-      scrollTrigger: { trigger: wordmark, start: 'top bottom', end: 'max', scrub: 0.5 },
-    },
-  )
+  const letters = wordmark ? Array.from(wordmark.querySelectorAll<HTMLElement>('[data-footer-letter]')) : []
+  if (!wordmark || !letters.length) return
+  const tween = gsap.from(letters, {
+    yPercent: 105,
+    rotation: (i) => [-14, 10, -8, 12, -10, 8, -12][i % 7],
+    ease: 'back.out(1.7)',
+    stagger: 0.08,
+    scrollTrigger: { trigger: wordmark, start: 'top bottom', end: 'max', scrub: 0.6 },
+  })
   return () => {
-    lid.style.transform = 'translateY(-105%)'
+    tween.scrollTrigger?.kill()
+    tween.revert()
   }
 }
 
